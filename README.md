@@ -1,6 +1,7 @@
 # Addressables Manager
-![Logo] 
-(https://github.com/SujanDuttaMishra/com.addressablesmanager.core/blob/master/Documentation%7E/logo.png)
+<p align="center">
+  <img width="180" src="https://github.com/SujanDuttaMishra/com.addressablesmanager.core/blob/master/Documentation/logo.png" alt="logo">
+</p>
 >Unity Addressable Manager and Setter.
 ___
 * [Set Addressable Asset From Folder] ()
