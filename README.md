@@ -19,6 +19,20 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
             "com.addressablesmanager.core": "https://github.com/SujanDuttaMishra/com.addressablesmanager.core.git"
         }
     }
+     <p align="center">
+     <img width="600" src="https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/PackageManagerGit.png" alt="logo">
+     </p>
+
+    alternatively copy 
+    https://github.com/SujanDuttaMishra/com.addressablesmanager.core.git
+    and paste it in unity packetge manager 
+
+
+
+   
+
+
+    
 
 ## How to Use
 
