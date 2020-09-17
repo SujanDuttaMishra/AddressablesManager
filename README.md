@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img width="1280" src="https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation/logo.png" alt="logo">
+  <img width="1280" src="https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/logo.png" alt="logo">
 </p>
 
 ___
