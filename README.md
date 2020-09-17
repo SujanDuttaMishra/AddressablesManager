@@ -20,7 +20,7 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
         }
     }
   <p align="center">
-  <img width="600" src="https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/PackageManagerGit.png" alt="logo">
+  <img width="600" src="https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/packagemanager.png" alt="logo">
   </p>
 
     alternatively copy 
