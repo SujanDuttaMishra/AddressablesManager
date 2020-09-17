@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "unity": "2019.4",
   "author": "Sujan Mishra",
-  "description": "Easy Unity Addressable Manager and Setter,Set Addressable Asset From Folder,Assign Auto Load Mechanism",
+  "description": "Unity Addressable Manager and Setter.\nSet Addressable Asset From Folder\nAssign Auto Load Mechanism",
   "dependencies": {
     "com.unity.addressables": "1.8.5"
   },
@@ -21,6 +21,5 @@
     "revision": "679387cb1fa822190b530bdbb8ea0945f508b5f6"
   },
   "type": "tool",
-  "unityRelease": "10f1",
-  "hideInEditor": false
+  "unityRelease": "10f1"
 }
