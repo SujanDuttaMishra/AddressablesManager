@@ -8,9 +8,10 @@
   "dependencies": {
     "com.unity.addressables": "1.8.5"
   },
+  "keywords": [ "Unity", "Addressable", "Addressable Manager", "Addressable setter", "Addressable Utility" ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/SujanDuttaMishra/AddressablesManager",
+    "url": "https://github.com/SujanDuttaMishra/com.addressablesmanager.core",
     "revision": "679387cb1fa822190b530bdbb8ea0945f508b5f6"
   }
 }
