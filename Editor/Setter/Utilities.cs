@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     internal static class Utilities
     {

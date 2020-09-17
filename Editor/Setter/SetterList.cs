@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     public class SetterList:ScriptableObject
     {

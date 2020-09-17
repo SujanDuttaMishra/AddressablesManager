@@ -2,16 +2,25 @@
   "name": "com.addressablesmanager.core",
   "displayName": "Addressable Manager",
   "version": "1.0.0",
-  "unity": "2019.4.10f1",
+  "unity": "2019.4",
   "author": "Sujan Mishra",
-  "description": "Easy Unity Addressable Manager and Setter,Set Addressable Asset From Folder,Assign Auto Load Mechanism ",
+  "description": "Easy Unity Addressable Manager and Setter,Set Addressable Asset From Folder,Assign Auto Load Mechanism",
   "dependencies": {
     "com.unity.addressables": "1.8.5"
   },
-  "keywords": [ "Unity", "Addressable", "Addressable Manager", "Addressable setter", "Addressable Utility" ],
+  "keywords": [
+    "Unity",
+    "Addressable",
+    "Addressable Manager",
+    "Addressable setter",
+    "Addressable Utility"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/SujanDuttaMishra/com.addressablesmanager.core",
     "revision": "679387cb1fa822190b530bdbb8ea0945f508b5f6"
-  }
+  },
+  "type": "tool",
+  "unityRelease": "10f1",
+  "hideInEditor": false
 }

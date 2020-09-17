@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     [Serializable]
     public class AData

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageTemplate
     {

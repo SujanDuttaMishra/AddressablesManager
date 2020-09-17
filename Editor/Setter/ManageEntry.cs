@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageEntry
     {

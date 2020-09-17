@@ -4,7 +4,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     internal class AllAddressableSettersEditor
     {

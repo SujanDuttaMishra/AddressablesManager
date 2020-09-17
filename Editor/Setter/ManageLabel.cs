@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine.AddressableAssets;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageLabel
     {

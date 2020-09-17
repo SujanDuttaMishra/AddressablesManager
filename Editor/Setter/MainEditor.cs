@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     [CustomEditor(typeof(Setter), true)]
     internal class MainEditor : UnityEditor.Editor

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace AddressableManager.AddressableSetter
+namespace AddressableManager.AddressableSetter.Editor
 {
     [CustomEditor(typeof(GlobalList), true)]
     internal class GlobalListEditor : UnityEditor.Editor
