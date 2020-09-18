@@ -37,15 +37,13 @@ After Values Reassigned
 Check out Two Additional Scriptable object under Asset Data 
 
 ***
-Now Your Scriptable object can be used in Manager To Auto load Manage for both on start / on Awake , Asset set as not auto load cab be loaded on demand by referencing to folder scrriptable found in every folder that became addressable.
+Now Your Scriptable object can be used in Manager To Auto load Manage for both on start / on Awake , Asset set as not auto load cab be loaded on demand by referencing to folder Scriptable found in every folder that became addressable.
 
 ![](https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/globalonstartawake.png)
 
-follow addressable manager page wiki section for Further how ?
 ***
+
+
 [Home](index.md)
-***
 [Back](SetUpUnityAddressable.md)
-***
 [Set Up Manager]()
-***
