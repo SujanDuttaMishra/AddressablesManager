@@ -44,5 +44,8 @@ Now Your Scriptable object can be used in Manager To Auto load Manage for both o
 follow addressable manager page wiki section for Further how ?
 ***
 [Home](index.md)
+***
 [Back](SetUpUnityAddressable.md)
+***
 [Set Up Manager]()
+***
