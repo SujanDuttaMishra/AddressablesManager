@@ -15,6 +15,6 @@ Install unity Addressable and do initial mandatory Set up.
 
 
 [Back](index.md)
-
+[SetAddressablFromFolder](SetAddressablFromFolder.md)
 
 
