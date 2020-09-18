@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img width="1280" src="https://raw.githubusercontent.com/SujanDuttaMishra/AddressablesManager/master/Documentation~/logo.png" alt="logo">
+  <img width="1280" src="https://raw.githubusercontent.com/SujanDuttaMishra/AddressablesManager/gh-pages/images/logo.png" alt="logo">
 </p>
 
 ___
