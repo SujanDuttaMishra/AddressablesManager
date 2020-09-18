@@ -36,4 +36,4 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
 
 ## How to Use
 
-See [usage](https://github.com/SujanDuttaMishra/AddressablesManager.git/wiki)
+See [usage](https://github.com/SujanDuttaMishra/AddressablesManager/wiki)
