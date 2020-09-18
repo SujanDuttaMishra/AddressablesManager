@@ -45,5 +45,7 @@ Now Your Scriptable object can be used in Manager To Auto load Manage for both o
 
 
 [Home](index.md)
+
 [Back](SetUpUnityAddressable.md)
+
 [Set Up Manager]()
