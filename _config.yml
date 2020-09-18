@@ -1,6 +1,2 @@
-title: "Addressable Manager"
-output: 
-  html_document:
-    includes:
-       in_header: GA_Script.html
+title: "Addressable Sujan Manager"
 theme: jekyll-theme-merlot
