@@ -1,7 +1,7 @@
 # Set Up Unity Addressable
 Install unity Addressable and do initial mandatory Set up.
 
-![](https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/Initialsetup.png)
+![](images/Initialsetup.png)
 
 ***
 
@@ -11,7 +11,7 @@ Install unity Addressable and do initial mandatory Set up.
 
 * provided remote and local settings are set as packed separately, As i found downloading a huge file is unnecessary, if you want to manage memory. we can only load and unload needed files this way. if you want to pack with other settings you can create new settings and it will appear on drop down list. Addressable group thus created will use that setting, i.e remote/local build or load path etc.. 
 
-![](https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/copy_settings.png)
+![](images/copy_settings.png)
 
 [Back](index.md)
 
