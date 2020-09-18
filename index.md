@@ -32,5 +32,5 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
 
 See [usage](https://github.com/SujanDuttaMishra/AddressablesManager/wiki)
 
-See [Set Up Unity Addressable](https://github.com/SujanDuttaMishra/AddressablesManager/blob/master/Documentation~/SetUpUnityAddressable.md)
+See [SetUp UnityAddressable](https://github.com/SujanDuttaMishra/AddressablesManager/blob/master/Documentation~/SetUpUnityAddressable.md)
 
