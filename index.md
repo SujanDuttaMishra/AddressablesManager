@@ -30,7 +30,5 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
 
 ## How to Use
 
-See [usage](wiki)
-
-See [SetUp UnityAddressable](SetUpUnityAddressable.md)
+[SetUp UnityAddressable](SetUpUnityAddressable.md)
 
