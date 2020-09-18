@@ -13,9 +13,8 @@ Install unity Addressable and do initial mandatory Set up.
 
 ![](https://raw.githubusercontent.com/SujanDuttaMishra/com.addressablesmanager.core/master/Documentation~/copy_settings.png)
 
-***
 [Back](index.md)
-***
+
 [SetAddressablFromFolder](SetAddressablFromFolder.md)
-***
+
 
