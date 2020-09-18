@@ -34,9 +34,9 @@ namespace AddressableManager.AddressableSetter.Editor
                 EditorGUILayout.BeginVertical("Box");
                 EditorGUILayout.BeginHorizontal();
 
-                var header = FolderNameIsGroupName ?
-                    new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] GroupLabel", "[+/-] " + nameof(Setter.customLabel) } :
-                    new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] " + nameof(Setter.customLabel) };
+                var header = FolderNameIsGroupName ? 
+                    new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] " + nameof(Setter.customLabel) } :
+                    new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] GroupLabel", "[+/-] " + nameof(Setter.customLabel) };
 
                 Utilities.Labels(header, headerCount);
 
@@ -95,7 +95,8 @@ namespace AddressableManager.AddressableSetter.Editor
             }
 
             if (!EditorGUI.EndChangeCheck()) return;
-            if (Setter.ManageEntry.EntriesAdded) Setter.Update();
+            if (Setter.ManageEntry.EntriesAdded) Setter.ManageEntry.RefreshEntryLabels();
+
         }
 
         private void GroupNameLabel(int headerCount)
@@ -119,7 +120,7 @@ namespace AddressableManager.AddressableSetter.Editor
             }
 
             if (!EditorGUI.EndChangeCheck()) return;
-            if (Setter.ManageEntry.EntriesAdded) Setter.Update();
+            if (Setter.ManageEntry.EntriesAdded) Setter.ManageEntry.RefreshEntryLabels();
         }
 
         private void CustomLabel(int headerCount)

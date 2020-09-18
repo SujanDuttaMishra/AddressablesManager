@@ -107,12 +107,12 @@ namespace AddressableManager.AddressableSetter.Editor
                 default: throw new ArgumentOutOfRangeException();
             }
 
-            labels = ManageLabel.AddLabels(entry, labels);
+            RefreshLabels();
             entry = Utilities.DefaultAssetSettings.CreateOrMoveEntry(ID, group);
 
         }
 
-
+        public void RefreshLabels() => labels = ManageLabel.AddLabels(entry, Setter.labelReferences);
     }
 
 

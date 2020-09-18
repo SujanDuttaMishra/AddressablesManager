@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SchemaObjects:
   - {fileID: 4270048933229937879}
+  - {fileID: 7132721794418130723}
   m_Description: Local
   m_Settings: {fileID: 11400000, guid: 930147be5e17ade44aa851a8c266ffd7, type: 2}
 --- !u!114 &4270048933229937879
@@ -38,15 +39,29 @@ MonoBehaviour:
   m_UseAssetBundleCache: 1
   m_UseAssetBundleCrc: 1
   m_Timeout: 0
-  m_ChunkedTransfer: 0
+  m_ChunkedTransfer: 1
   m_RedirectLimit: -1
   m_RetryCount: 0
   m_BuildPath:
-    m_Id: 1b16954aee6d78a418342d93de93ce8e
+    m_Id: 085497b80c991a941bdb5ef0ae7e20ee
   m_LoadPath:
-    m_Id: a09e7d1e333fd894dae9e492bdbfc333
+    m_Id: effbd7977d1a6ee4b864b90906e5fd8d
   m_BundleMode: 1
   m_AssetBundleProviderType:
     m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
   m_BundleNaming: 1
+--- !u!114 &7132721794418130723
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
+  m_Name: ContentUpdateGroupSchema
+  m_EditorClassIdentifier: 
+  m_Group: {fileID: 0}
+  m_StaticContent: 0

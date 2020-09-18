@@ -8,7 +8,6 @@ namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageLabel
     {
-        private List<string> LabelsInAssetSettings => Utilities.LabelsToStringList(Setter.assetSettings);
         private AddressableAssetSettings AssetSettings => Setter.assetSettings;
         private List<AssetLabelReference> LabelReferences { get => Setter.labelReferences; set => Setter.labelReferences = value; }
         private List<string> CustomLabelList { get => Setter.customLabelList; set => Setter.customLabelList = value; }
@@ -27,73 +26,43 @@ namespace AddressableManager.AddressableSetter.Editor
         public void AddLabel(string label)
         {
             if (!Utilities.IsLabelIn(label, LabelReferences)) LabelReferences.Add(new AssetLabelReference { labelString = label });
-            if (!LabelsInAssetSettings.Contains(label)) AssetSettings.AddLabel(label);
+            if (!Utilities.LabelsToStringList(AssetSettings).Contains(label)) AssetSettings.AddLabel(label);
+            if (!Utilities.LabelsToStringList(Utilities.DefaultAssetSettings).Contains(label)) Utilities.DefaultAssetSettings.AddLabel(label);
         }
         public void RemoveLabel(string label)
         {
             if (LabelReferences.Count > 0) LabelReferences = LabelReferences.Where(o => o.labelString != label).ToList();
             if (CustomLabelList.Count > 0) CustomLabelList = CustomLabelList.Where(o => o != label).ToList();
             Utilities.RemoveLabelFrom(label, AssetSettings);
-            Utilities.RemoveLabelFrom(label, Setter.ManageGroup.DefaultAddressableSettings);
+            Utilities.RemoveLabelFrom(label, Utilities.DefaultAssetSettings);
         }
-        public static void AddLabel(string label, AddressableAssetEntry entry)
+        public static void AddLabelToEntry(AddressableAssetEntry entry, string label) { if (!entry.labels.Contains(label)) entry.labels.Add(label); }
+        private static void RemoveLabelFromEntry(AddressableAssetEntry entry, string label) { if (entry.labels.Contains(label)) entry.labels.Remove(label); }
+        public static void RemoveOnStart(AddressableAssetEntry entry) => RemoveLabelFromEntry(entry, Constants.OnStart);
+        public static void RemoveOnAwake(AddressableAssetEntry entry) => RemoveLabelFromEntry(entry, Constants.OnAwake);
+        public static void AddOnStart(AddressableAssetEntry entry) => AddLabelToEntry(entry, Constants.OnStart);
+        public static void AddOnAwake(AddressableAssetEntry entry) => AddLabelToEntry(entry, Constants.OnAwake);
+        public void RemoveLabels()
         {
-            if (!entry.labels.Contains(label)) entry.labels.Add(label);
+            RemoveAndClearLabelFrom(LabelReferences, AssetSettings, Utilities.DefaultAssetSettings);
+            RemoveAndClearLabelFrom(CustomLabelList, AssetSettings, Utilities.DefaultAssetSettings);
         }
-        public static void RemoveOnStart(AddressableAssetEntry entry)
+        public static void RemoveAndClearLabelFrom(List<AssetLabelReference> list, AddressableAssetSettings settings, AddressableAssetSettings defaultSettings)
         {
-            if (entry.labels.Contains(Constants.OnStart)) entry.labels.Remove(Constants.OnStart);
+            if (list.Count <= 0) return;
+            list.ForEach(label => { Utilities.RemoveLabelFrom(label.labelString, settings); Utilities.RemoveLabelFrom(label.labelString, defaultSettings); });
+            list.Clear();
         }
-        public static void RemoveOnAwake(AddressableAssetEntry entry)
+        public static void RemoveAndClearLabelFrom(List<string> list, AddressableAssetSettings settings, AddressableAssetSettings defaultSettings)
         {
-            if (entry.labels.Contains(Constants.OnAwake)) entry.labels.Remove(Constants.OnAwake);
+            if (list.Count <= 0) return;
+            list.ForEach(label => { Utilities.RemoveLabelFrom(label, settings); Utilities.RemoveLabelFrom(label, defaultSettings); });
+            list.Clear();
         }
-        public static void AddOnStart(AddressableAssetEntry entry)
+        public static List<string> AddLabels(AddressableAssetEntry entry, List<AssetLabelReference> labelReferences)
         {
-            if (!entry.labels.Contains(Constants.OnStart)) entry.labels.Add(Constants.OnStart);
-        }
-        public static void AddOnAwake(AddressableAssetEntry entry)
-        {
-            if (!entry.labels.Contains(Constants.OnAwake)) entry.labels.Add(Constants.OnAwake);
-        }
-        public void RemoveLabel()
-        {
-            if (LabelReferences.Count <= 0) return;
-            LabelReferences.ForEach(label =>
-            {
-                Utilities.RemoveLabelFrom(label.labelString, AssetSettings);
-                Utilities.RemoveLabelFrom(label.labelString, Setter.ManageGroup.DefaultAddressableSettings);
-
-            });
-            LabelReferences.Clear();
-        }
-        public List<string> AddLabels(AddressableAssetEntry entry)
-        {
-            if (LabelReferences.Count <= 0) return new List<string>();
-
-            LabelReferences.ForEach(o =>
-            {
-                if (o.labelString != Constants.OnAwake && o.labelString != Constants.OnStart)
-                {
-                    AddLabel(o.labelString, entry);
-                }
-
-            });
-            return entry.labels.ToList();
-        }
-
-        public static List<string> AddLabels(AddressableAssetEntry entry, List<string> labelReferences)
-        {
-            if (labelReferences?.Count <= 0) return new List<string>();
-
-            labelReferences?.ForEach(o =>
-            {
-                if (o != Constants.OnAwake && o != Constants.OnStart)
-                {
-                    AddLabel(o, entry);
-                }
-
-            });
+            if (labelReferences.Count <= 0) return entry.labels.ToList();
+            labelReferences.ForEach(o => { if (o.labelString != Constants.OnAwake && o.labelString != Constants.OnStart) AddLabelToEntry(entry, o.labelString); });
             return entry.labels.ToList();
         }
     }

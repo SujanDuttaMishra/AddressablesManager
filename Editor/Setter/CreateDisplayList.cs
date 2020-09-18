@@ -10,11 +10,11 @@ namespace AddressableManager.AddressableSetter.Editor
         private string[] UnloadOptions { get; }
         private string[] AutoLoadOptions { get; }
         private static string[] SceneNamesArray { get; set; }
-        private int AutoLoadPopUpOnStart { get; set; }
+        private int AutoLoadPopUpOnStart { get; set; } = 1;
         private int OnAwakeLoadWithSceneIndex { get; set; }
         private int UnloadOnAwakeIndex { get; set; }
         private int AutoLoadPopUpNone { get; set; }
-        private int AutoLoadPopUpOnAwake { get; set; }
+        private int AutoLoadPopUpOnAwake { get; set; } = 2;
         private int OnStartLoadWithSceneIndex { get; set; }
         private int UnloadOnStartIndex { get; set; }
         private int LoadWithSceneIndex { get; set; }
@@ -31,8 +31,10 @@ namespace AddressableManager.AddressableSetter.Editor
 
         internal void Create(IReadOnlyList<AData> list, SerializedProperty serializedProperty, AutoLoad autoLoadLabel, UnityEditor.Editor mainEditor)
         {
+            if (list.Count <= 0) return;
             mainEditor.serializedObject.Update();
             EditorGUILayout.BeginVertical("Box");
+
             var column = Headers(list, autoLoadLabel).Length;
             EditorGUILayout.BeginHorizontal("Box");
             ApplyToAllButton = Utilities.Button("Apply To All", column);
@@ -113,22 +115,47 @@ namespace AddressableManager.AddressableSetter.Editor
         private static string[] Headers(IReadOnlyCollection<AData> list, AutoLoad autoLoadLabel)
         {
             string[] headers;
+            string buttonName;
+            GlobalList asset;
             switch (autoLoadLabel)
             {
                 case AutoLoad.OnStart:
                     headers = new[] { $"{Constants.OnStart} : Total = {list.Count}", $"AutoLoad", $"load With Scene", $"Unload" };
+                    buttonName = "Global OnStart";
+                    asset = Utilities.GetAsset<GlobalList>(Constants.GlobalOnStartList);
                     break;
                 case AutoLoad.OnAwake:
                     headers = new[] { $"{ Constants.OnAwake} : Total = {list.Count}", $"AutoLoad", $"load With Scene", $"Unload" };
+                    buttonName = "Global OnAwake";
+                    asset = Utilities.GetAsset<GlobalList>(Constants.GlobalOnAwakeList);
                     break;
                 case AutoLoad.None:
                     headers = new[] { $"No AutoLoad : Total = {list.Count}", $"AutoLoad" };
+                    buttonName = string.Empty;
+                    asset = null;
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(autoLoadLabel), autoLoadLabel, null);
             }
-            EditorGUILayout.BeginHorizontal();
+
+            var style = new GUIStyle(GUI.skin.button)
+            {
+                hover = { textColor = Color.green },
+                fontSize = 11
+               
+            };
+
+            EditorGUILayout.BeginVertical();
+
+            if (!string.IsNullOrEmpty(buttonName))
+                if (Utilities.Button(buttonName, style, 100, 25) && asset != null)
+                    EditorGUIUtility.PingObject(asset);
+
+            EditorGUILayout.BeginHorizontal("Box");
             Utilities.Labels(headers, headers.Length);
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.EndVertical();
+
             return headers;
         }
     }

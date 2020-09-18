@@ -4,7 +4,7 @@
 </p>
 
 ___
->Unity Addressable Manager and Setter.
+>Unity Addressable Manager and Setter.(Status : Under Development && Test)
 
 - [Install Package](#install-package)
   - [Install via Git URL](#install-via-git-url)

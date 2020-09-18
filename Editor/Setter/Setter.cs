@@ -77,7 +77,7 @@ namespace AddressableManager.AddressableSetter.Editor
             {
                 ManageEntry?.Entries.Clear();
                 pathsToImport.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
-                ManageEntry?.AddEntryToList();
+                ManageEntry?.CreateAData();
             }
             AssetDatabase.SaveAssets();
         }
@@ -99,7 +99,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public void Remove()
         {
-            ManageLabel.RemoveLabel();
+            ManageLabel.RemoveLabels();
             ManageEntry.RemoveEntry();
             autoLoad = AutoLoad.None;
             AssetDatabase.SaveAssets();
