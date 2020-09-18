@@ -1,10 +1,5 @@
 
-<p align="center">
-  <img width="1280" src="Images/logo.png" alt="logo">
-</p>
-
-___
->Unity Addressable Manager and Setter.(Status : Under Development && Test)
+>Addressable Manager & Setter => "Under Development && Test"
 
 - [Install Package](#install-package)
   - [Install via Git URL](#install-via-git-url)
