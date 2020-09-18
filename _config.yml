@@ -1,1 +1,6 @@
+title: "Addressable Manager"
+output: 
+  html_document:
+    includes:
+       in_header: GA_Script.html
 theme: jekyll-theme-merlot
