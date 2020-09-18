@@ -1,7 +1,6 @@
 
-
 <p align="center">
-  <img width="1280" src="https://raw.githubusercontent.com/SujanDuttaMishra/AddressablesManager/gh-pages/images/logo.png" alt="logo">
+  <img width="1280" src="Images/logo.png" alt="logo">
 </p>
 
 ___
@@ -21,7 +20,7 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
         }
     }
   <p align="center">
-  <img width="600" src="https://raw.githubusercontent.com/SujanDuttaMishra/AddressablesManager/master/Documentation~/packagemanager.png" alt="logo">
+  <img width="600" src="Images/packagemanager.png" alt="logo">
   </p>
 
     alternatively copy 
@@ -31,4 +30,6 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
 ## How to Use
 
 [SetUp UnityAddressable](SetUpUnityAddressable.md)
+
+
 
