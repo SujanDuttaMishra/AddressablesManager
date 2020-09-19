@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -16,7 +17,7 @@ namespace AddressableManager.AddressableSetter.Editor
         internal static GUILayoutOption MaxWidth(int column) => GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column);
         internal static bool Button(string buttonName, GUIStyle style, int width, int height) => GUILayout.Button(buttonName, style, GUILayout.Width(width), GUILayout.Height(height));
         internal static void Label(string content, int column = 1) => EditorGUILayout.LabelField(FUpper(content), GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
-        internal static string FUpper(string content) => char.ToUpper(content[0]) + ((content.Length > 1) ? content.Substring(1) : string.Empty);
+        internal static string FUpper(string content) => Char.ToUpper(content[0]) + ((content.Length > 1) ? content.Substring(1) : String.Empty);
         internal static void Labels(string[] contents, int column = 1) => contents.ForEach(o => Label(o, column));
         internal static string[] SceneNames()
         {
@@ -63,7 +64,7 @@ namespace AddressableManager.AddressableSetter.Editor
         internal static T GetOrCreateInstance<T>(string assetDataPath, string parentFolder, string newFolderName, string fileName, out string path) where T : ScriptableObject
         {
             var asset = GetAsset<T>(fileName);
-            if (asset) { path = AssetDatabase.GetAssetPath(asset); return asset; }
+            if (asset !=null) { path = AssetDatabase.GetAssetPath(asset); return asset; }
             path = GetOrCreateDirectory(assetDataPath, parentFolder, newFolderName);
             var instance = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(instance, AssetDatabase.GenerateUniqueAssetPath(path + $"/{fileName}.asset"));
@@ -100,12 +101,29 @@ namespace AddressableManager.AddressableSetter.Editor
         public static bool FindAdataIn(List<AData> list, AData aData, out AData outAData) => (outAData = list.Find(o => CompareOrdinal(aData, o))) != null;
         public static bool FindAdataIn(List<AData> list, AData aData) => (list.Find(o => CompareOrdinal(aData, o))) != null;
         public static bool CompareOrdinal(AData aData, AData o) => CompareOrdinal(aData.ID, o.ID);
-        public static bool CompareOrdinal(string a, string b) => string.CompareOrdinal(a, b) == 0;
-        public static bool IsNullEmptyWhiteSpace(string str) => string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
-        public static List<AData> GlobalOnAwakeList => GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
-        public static List<AData> GlobalOnStartList => GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
-        public static List<Setter> SettersList => GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
+        public static bool CompareOrdinal(string a, string b) => String.CompareOrdinal(a, b) == 0;
+        public static bool IsNullEmptyWhiteSpace(string str) => String.IsNullOrEmpty(str) || String.IsNullOrWhiteSpace(str);
+        public static List<AData> GlobalOnAwakeList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnAwakeList,out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
+        public static List<AData> GlobalOnStartList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
+        public static bool LoadAssetAtPath<T>(string globalList, out T outGlobalList) where T: ScriptableObject
+        {
+            return (outGlobalList = (T)AssetDatabase.LoadAssetAtPath($"Packages/com.addressablesmanager.core/Settings/{globalList}.asset", typeof(T))) != null;
+        }
+
+        public static List<Setter> SettersList => LoadAssetAtPath<SetterList>(nameof(SetterList), out var globalList) ? globalList.settersList : GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
         internal static Setter GetSetter(string groupName) => GetAsset<Setter>(groupName);
         public static AddressableAssetSettings DefaultAssetSettings => AddressableAssetSettingsDefaultObject.Settings;
+
+        public static void PingButton<T>(string buttonName, T asset) where T:ScriptableObject
+        {
+            var style = new GUIStyle(GUI.skin.button)
+            {
+                hover = { textColor = Color.green },
+                fontSize = 11
+            };
+
+            if (string.IsNullOrEmpty(buttonName)) return;
+            if (Button(buttonName, style, 100, 25) && asset != null) EditorGUIUtility.PingObject(asset);
+        }
     }
 }

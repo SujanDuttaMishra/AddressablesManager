@@ -1,0 +1,407 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c9c1fc44c893cc419bf3ef76cd280ff, type: 3}
+  m_Name: GlobalOnStartList
+  m_EditorClassIdentifier: 
+  aDataList:
+  - name: DM-CGS-15
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 0c008ee3ee72a4362a35be25fa5de043
+      m_Address: DM-CGS-15
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 0c008ee3ee72a4362a35be25fa5de043
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-15.wav
+    obj: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-03
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 19f89c6e740e7447f9e12a8310d3e973
+      m_Address: DM-CGS-03
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 19f89c6e740e7447f9e12a8310d3e973
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-03.wav
+    obj: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: Cylinder
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 267d6cc8c534d7a44bb1615bcf2f5eaf
+      m_Address: Cylinder
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8828465947688495651, guid: 267d6cc8c534d7a44bb1615bcf2f5eaf,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 267d6cc8c534d7a44bb1615bcf2f5eaf
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Cylinder.prefab
+    obj: {fileID: 8828465947688495651, guid: 267d6cc8c534d7a44bb1615bcf2f5eaf, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-07
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 2c5292ba5cf254919a6b9e2b18e04f49
+      m_Address: DM-CGS-07
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 2c5292ba5cf254919a6b9e2b18e04f49
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-07.wav
+    obj: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: FlamesParticleEffect
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 3228a22491941734bb83ad691d17fcb9
+      m_Address: FlamesParticleEffect
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 1000010823978654, guid: 3228a22491941734bb83ad691d17fcb9,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 3228a22491941734bb83ad691d17fcb9
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Flares/FlamesParticleEffect.prefab
+    obj: {fileID: 1000010823978654, guid: 3228a22491941734bb83ad691d17fcb9, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: Cube
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 4e8c5dd9fe3c6d943b445e5fcba688d1
+      m_Address: Cube
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 727272302826414423, guid: 4e8c5dd9fe3c6d943b445e5fcba688d1,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 4e8c5dd9fe3c6d943b445e5fcba688d1
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Cube.prefab
+    obj: {fileID: 727272302826414423, guid: 4e8c5dd9fe3c6d943b445e5fcba688d1, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-16
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 724131bc8a7f34041bb9f1701f0cb58d
+      m_Address: DM-CGS-16
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: 724131bc8a7f34041bb9f1701f0cb58d, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 724131bc8a7f34041bb9f1701f0cb58d
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-16.wav
+    obj: {fileID: 8300000, guid: 724131bc8a7f34041bb9f1701f0cb58d, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: PlasmaExplosionEffect
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: 96730f8640590934eacb6f860058e7f9
+      m_Address: PlasmaExplosionEffect
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 1000011128802252, guid: 96730f8640590934eacb6f860058e7f9,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: 96730f8640590934eacb6f860058e7f9
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Flares/PlasmaExplosionEffect.prefab
+    obj: {fileID: 1000011128802252, guid: 96730f8640590934eacb6f860058e7f9, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: BigExplosionEffect
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: acf39d9f4addf294d93fa56fa373961b
+      m_Address: BigExplosionEffect
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: acf39d9f4addf294d93fa56fa373961b
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Flares/BigExplosionEffect.prefab
+    obj: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-05
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: b99da9a57308d4ba1bee1cf1d9038376
+      m_Address: DM-CGS-05
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: b99da9a57308d4ba1bee1cf1d9038376
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-05.wav
+    obj: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: Capsule
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: c5c2218335f3c8244904033634612d45
+      m_Address: Capsule
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 686856613106801568, guid: c5c2218335f3c8244904033634612d45,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: c5c2218335f3c8244904033634612d45
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Capsule.prefab
+    obj: {fileID: 686856613106801568, guid: c5c2218335f3c8244904033634612d45, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: Sphere
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: d6994e019bcd28145a4158da2627193d
+      m_Address: Sphere
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 488741033002157174, guid: d6994e019bcd28145a4158da2627193d,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: d6994e019bcd28145a4158da2627193d
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Sphere.prefab
+    obj: {fileID: 488741033002157174, guid: d6994e019bcd28145a4158da2627193d, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-22
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: d8d04c6f80a1140db85ede568dab1f51
+      m_Address: DM-CGS-22
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: d8d04c6f80a1140db85ede568dab1f51, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: d8d04c6f80a1140db85ede568dab1f51
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-22.wav
+    obj: {fileID: 8300000, guid: d8d04c6f80a1140db85ede568dab1f51, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-02
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: dc6614beca09347ec9b258f12d154bdd
+      m_Address: DM-CGS-02
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: dc6614beca09347ec9b258f12d154bdd, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: dc6614beca09347ec9b258f12d154bdd
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-02.wav
+    obj: {fileID: 8300000, guid: dc6614beca09347ec9b258f12d154bdd, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: SmallExplosionEffect
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: ecdd96beb7f93494880c052dfccf9dc1
+      m_Address: SmallExplosionEffect
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1,
+        type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: ecdd96beb7f93494880c052dfccf9dc1
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Flares/SmallExplosionEffect.prefab
+    obj: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0
+  - name: DM-CGS-21
+    group: {fileID: 11400000, guid: b9ac699aee3a94246981913400e1125c, type: 2}
+    entry:
+      m_GUID: ffb159a21c8a04135a5616979c828fab
+      m_Address: DM-CGS-21
+      m_ReadOnly: 0
+      m_SerializedLabels:
+      - OnStart
+      - AssetData
+      m_MainAsset: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+      m_TargetAsset: {fileID: 0}
+    assetReference:
+      m_AssetGUID: ffb159a21c8a04135a5616979c828fab
+      m_SubObjectName: 
+    assetPath: Assets/AssetData/Test/Audio/DM-CGS-21.wav
+    obj: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+    labels:
+    - OnStart
+    - AssetData
+    loadOnSceneIndex: 0
+    loadOnScene:
+      m_Handle: -1218
+    autoLoad: 1
+    unload: 0

@@ -152,32 +152,20 @@ namespace AddressableManager.AddressableSetter.Editor
 
 
         }
-
         private void LabelToApply()
         {
-
             EditorGUILayout.BeginVertical("Box");
             var list = Setter.labelReferences;
-            Utilities.Label($"Labels To Apply : {list.Count}");
-
+            var style = new GUIStyle { richText = true };
+            var content = list.Count > 0 ? 
+                $" <color=grey> Labels To Apply :</color> <color=green> {list.Count} </color>  " :
+                $" <color=yellow> Labels To Apply : {list.Count} </color> <color=grey>! Add Labels From Label Settings and Click </color> <color=white> Add  </color>";
+            GUILayout.Label(content, style, Utilities.MaxWidth(1));
             var property = MainEditor.serializedObject.FindProperty(nameof(Setter.labelReferences));
             property.serializedObject.Update();
-
-            if (list.Count > 0)
-            {
-                for (var i = 0; i < list.Count; i++)
-                {
-                    var item = property.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PropertyField(item);
-                }
-            }
-
+            if (list.Count > 0) for (var i = 0; i < list.Count; i++) EditorGUILayout.PropertyField(property.GetArrayElementAtIndex(i));
             EditorGUILayout.EndVertical();
-
-
         }
-
-
         public void PropertyField(string path, GUIContent content, int column) =>
             EditorGUILayout.PropertyField(MainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
     }

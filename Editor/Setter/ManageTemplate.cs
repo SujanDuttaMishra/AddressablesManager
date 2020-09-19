@@ -18,7 +18,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public void InitTemplate()
         {
-            Setter.assetSettings = Utilities.GetOrCreateInstances<AddressableAssetSettings>(Constants.AddressableAssetSettingsName, true);
+           
             AllProfile = Setter.assetSettings.profileSettings.GetAllProfileNames();
             ApplyTemplate();
 

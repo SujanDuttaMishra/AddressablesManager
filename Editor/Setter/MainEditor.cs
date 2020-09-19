@@ -29,6 +29,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public override void OnInspectorGUI()
         {
             if (Setter == null) return;
+
             serializedObject.Update();
             if (!HeaderEditor.Init(out var assetPath)) return;
             GroupsEditor.Init();
@@ -41,6 +42,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void Lists(string assetPath)
         {
+            if(Setter.AssetCount <= 0) return;
             EditorGUI.BeginChangeCheck();
             var status = $"Asset Found @ {assetPath} Asset Count : {Setter.AssetCount}";
             var autoUpdate = ListsEditor.Init(status, new Dictionary<string, Tuple<List<AData>, AutoLoad>>

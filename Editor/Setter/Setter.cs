@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -29,6 +30,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public List<AssetLabelReference> labelReferences;
 
         public AddressableAssetGroupTemplate template;
+        public static AddressableAssetSettings AssetSettings { get; private set; }
         public AddressableAssetSettings assetSettings;
         public AddressableAssetGroup Group => ManageGroup.TryGetGroup();
         public bool IsGroup => ManageGroup.IsGroup();
@@ -37,21 +39,33 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public Setter()
         {
+
             ManageTemplate = new ManageTemplate(this);
             ManageEntry = new ManageEntry(this);
             ManageLabel = new ManageLabel(this);
             ManageGroup = new ManageGroup(this);
             labelReferences = new List<AssetLabelReference>();
             customLabelList = new List<string>();
+            assetSettings = AssetSettings;
         }
 
 
         [MenuItem("Assets/Addressable > SetEntry > FromFolder")]
         public static void CreateNew()
         {
+            if (!AddressableAssetSettingsDefaultObject.SettingsExists)
+            {
+                EditorUtility.DisplayDialog("Folder Setter", "Oops ! You Forget To \" Create \" Addressable Settings. " +
+                                                "\n \nGo To \"Addressable Groups\" And Click \" Create \"" +
+                                                "\nWe Then Can Create \"Addressable Group Settings\" ", "OK");
+                return;
+            }
+            AssetSettings = Utilities.GetOrCreateInstances<AddressableAssetSettings>(Constants.AddressableAssetSettingsName, true);
             var selection = AssetDatabase.GetAssetPath(Selection.activeObject);
             var fileName = Path.GetFileNameWithoutExtension(selection);
             if (!Utilities.GetAsset<Setter>(fileName)) Utilities.CreateNew<Setter>(fileName, selection);
+
+
         }
 
 
@@ -69,7 +83,7 @@ namespace AddressableManager.AddressableSetter.Editor
             noAutoLoadList = new List<AData>();
             onAwakeList = new List<AData>();
             onStartList = new List<AData>();
-            
+
 
             var pathsToImport = PathsToImport(GroupName);
 
@@ -79,6 +93,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 pathsToImport.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
                 ManageEntry?.CreateAData();
             }
+            if (!Utilities.SettersList.Contains(this)) Utilities.SettersList.Add(this);
             AssetDatabase.SaveAssets();
         }
 
@@ -102,6 +117,7 @@ namespace AddressableManager.AddressableSetter.Editor
             ManageLabel.RemoveLabels();
             ManageEntry.RemoveEntry();
             autoLoad = AutoLoad.None;
+            if(Utilities.SettersList.Contains(this)) Utilities.SettersList.Remove(this);
             AssetDatabase.SaveAssets();
 
         }

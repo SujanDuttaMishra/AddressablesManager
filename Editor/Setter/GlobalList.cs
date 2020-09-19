@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -11,7 +12,6 @@ namespace AddressableManager.AddressableSetter.Editor
         public static GlobalList GetOrCreateInstance(string fileName)
         {
             var globalList = Utilities.GetOrCreateInstance<GlobalList>( Constants.AssetDataPath, Constants.Asset, Constants.AssetData, fileName, out var path);
-            if (globalList == null) return globalList;
             OnCreatePath = path;
             globalList.name = fileName;
             return globalList;

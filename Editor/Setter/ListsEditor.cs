@@ -18,6 +18,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         internal bool Init(string status, Dictionary<string, Tuple<List<AData>, AutoLoad>> lists)
         {
+            if (lists.Count <= 0) return false;
             ShowList = EditorGUILayout.BeginFoldoutHeaderGroup(ShowList, status);
             if (ShowList)
             {

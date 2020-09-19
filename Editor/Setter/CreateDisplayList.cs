@@ -137,18 +137,11 @@ namespace AddressableManager.AddressableSetter.Editor
                 default: throw new ArgumentOutOfRangeException(nameof(autoLoadLabel), autoLoadLabel, null);
             }
 
-            var style = new GUIStyle(GUI.skin.button)
-            {
-                hover = { textColor = Color.green },
-                fontSize = 11
-               
-            };
+
 
             EditorGUILayout.BeginVertical();
 
-            if (!string.IsNullOrEmpty(buttonName))
-                if (Utilities.Button(buttonName, style, 100, 25) && asset != null)
-                    EditorGUIUtility.PingObject(asset);
+            Utilities.PingButton(buttonName, asset);
 
             EditorGUILayout.BeginHorizontal("Box");
             Utilities.Labels(headers, headers.Length);
