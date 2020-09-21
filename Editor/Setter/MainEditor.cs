@@ -9,6 +9,7 @@ namespace AddressableManager.AddressableSetter.Editor
     {
         internal Setter Setter { get; private set; }
         private HeaderEditor<Setter> HeaderEditor { get; set; }
+        private OptionEditor<Setter> OptionEditor { get; set; }
         private GroupsEditor<Setter> GroupsEditor { get; set; }
         private LabelsEditor LabelsEditor { get; set; }
         private ListsEditor<Setter> ListsEditor { get; set; }
@@ -20,6 +21,7 @@ namespace AddressableManager.AddressableSetter.Editor
             if (target == null) return;
             Setter = (Setter)target;
             HeaderEditor = new HeaderEditor<Setter>(this);
+            OptionEditor = new OptionEditor<Setter>(this);
             GroupsEditor = new GroupsEditor<Setter>(this);
             LabelsEditor = new LabelsEditor(this);
             ListsEditor = new ListsEditor<Setter>(this);
@@ -32,6 +34,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
             serializedObject.Update();
             if (!HeaderEditor.Init(out var assetPath)) return;
+            OptionEditor.Init();
             GroupsEditor.Init();
             LabelsEditor.Init();
             Lists(assetPath);

@@ -38,22 +38,19 @@ namespace AddressableManager.AddressableSetter.Editor
         internal static void PropertyField(UnityEditor.Editor mainEditor, string path, int column) =>
             EditorGUILayout.PropertyField(mainEditor.serializedObject.FindProperty(path), GUIContent.none, MaxWidth(column));
         internal static void ApplyModifiedProperties(UnityEditor.Editor mainEditor) { if (mainEditor.serializedObject.hasModifiedProperties) mainEditor.serializedObject.ApplyModifiedProperties(); }
-        public static List<string> GetAssetPathsFromLocation<T>(string folderSetterName, string[] toExclude) where T : ScriptableObject
+        public static List<string> GetAssetPathsFromLocation<T>(string folderSetterName, List<string> toExclude, SearchOption allDirectories) where T : ScriptableObject
         {
             var setterPath = GetAssetPath<T>(folderSetterName);
             setterPath = Path.GetDirectoryName(setterPath);
             var pathsToImport = new List<string>();
             var isDirectory = Directory.Exists(setterPath);
             if (!isDirectory) return pathsToImport;
-            var filesToAdd = Directory.GetFiles(setterPath, "*", SearchOption.AllDirectories);
-
+            var filesToAdd = Directory.GetFiles(setterPath, "*", allDirectories);
 
             foreach (var file in filesToAdd)
             {
-                if (!toExclude.Any(o => file.EndsWith(o)))
-                {
-                    pathsToImport.Add(file.Replace('\\', '/'));
-                }
+                if (!toExclude.Any(o => file.EndsWith(o) || o == file)) pathsToImport.Add(file.Replace('\\', '/'));
+
             }
 
             return pathsToImport;
@@ -84,7 +81,9 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public static string GetOrCreateDirectory(string assetDataPath, string parentFolder, string newFolderName) => !AssetDatabase.IsValidFolder(assetDataPath) ? AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder(parentFolder, newFolderName)) : assetDataPath;
         public static T GetAsset<T>(string assetName, out List<T> allAssetOfType) where T : ScriptableObject => (allAssetOfType = Resources.FindObjectsOfTypeAll<T>().ToList()).Find(o => o.name == assetName);
-        public static T GetAsset<T>(string assetName) where T : ScriptableObject => Resources.FindObjectsOfTypeAll<T>().ToList().Find(o => o.name == assetName);
+        public static T GetAsset<T>(string assetName) where T : ScriptableObject => GetAsset<T>().Find(o => o.name == assetName);
+        public static List<T> GetAsset<T>() where T : ScriptableObject => Resources.FindObjectsOfTypeAll<T>().ToList();
+
         public static string GetAssetPath<T>(string fileName) where T : ScriptableObject => AssetDatabase.GetAssetPath(GetAsset<T>(fileName));
         public static string GetAssetPath<T>(T asset) where T : ScriptableObject => AssetDatabase.GetAssetPath(asset);
 
@@ -125,5 +124,9 @@ namespace AddressableManager.AddressableSetter.Editor
             if (string.IsNullOrEmpty(buttonName)) return;
             if (Button(buttonName, style, 100, 25) && asset != null) EditorGUIUtility.PingObject(asset);
         }
+
+
+        public static void PropertyField(UnityEditor.Editor mainEditor, string path, GUIContent content, int column) =>
+            EditorGUILayout.PropertyField(mainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
     }
 }

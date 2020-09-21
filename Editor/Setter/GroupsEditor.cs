@@ -8,35 +8,40 @@ namespace AddressableManager.AddressableSetter.Editor
     internal class GroupsEditor<T> where T : ScriptableObject
     {
         private UnityEditor.Editor MainEditor { get; }
-        private Setter Setter => (Setter)MainEditor.target;
+        private Setter Setter => (Setter) MainEditor.target;
         private int Column { get; } = 4;
         private int TemplateIndex { get; set; }
         private int GroupsNameIndex { get; set; }
-        private bool GroupTemplateSettings { get; set; } = true;
+        private bool Foldout { get; set; } = true;
         private bool NewGroup { get; set; } = true;
         private bool FolderNameGroup { get; set; } = true;
         private bool Button { get; set; }
         private bool CleanEmptyGroup { get; set; }
         private bool IsNewTemplateValid => !Utilities.IsNullEmptyWhiteSpace(Setter.newTemplate);
+
         internal GroupsEditor(UnityEditor.Editor editor)
         {
             MainEditor = editor;
-            
+
         }
+
         internal void Init()
         {
-            GroupTemplateSettings = EditorGUILayout.BeginFoldoutHeaderGroup(GroupTemplateSettings, "Groups Settings");
-            if (GroupTemplateSettings)
+            Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, "Groups Settings");
+            if (Foldout)
             {
                 EditorGUILayout.BeginVertical("Box");
-                var headers = IsNewTemplateValid ?
-                    new[] { "  Templates Choice", "Selected Template", "Settings" } : new[] { "Enter New Templates", "Templates Choice", "Selected Template", "Settings" };
+                var headers = IsNewTemplateValid
+                    ? new[] {"  Templates Choice", "Selected Template", "Settings"}
+                    : new[] {"Enter New Templates", "Templates Choice", "Selected Template", "Settings"};
                 Headers(headers);
                 Body();
-                if (Setter.ManageGroup.EmptyGroupExists) CleanEmptyGroup = GUILayout.Button("Clean Empty Groups", GUILayout.MaxWidth(150));
+                if (Setter.ManageGroup.EmptyGroupExists)
+                    CleanEmptyGroup = GUILayout.Button("Clean Empty Groups", GUILayout.MaxWidth(150));
                 if (CleanEmptyGroup) Setter.ManageGroup.CleanEmptyGroup();
                 EditorGUILayout.EndVertical();
             }
+
             EditorGUILayout.EndFoldoutHeaderGroup();
             GUILayout.Space(5);
         }
@@ -60,6 +65,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 Setter.ManageTemplate.AddTemplates(Setter.newTemplate);
                 Setter.template = Setter.ManageTemplate.Templates.Find(o => o.Name == Setter.newTemplate);
             }
+
             var displayedOptions = Setter.ManageTemplate.TemplatesNames.ToArray();
             TemplateIndex = EditorGUILayout.Popup(TemplateIndex, displayedOptions, Utilities.MaxWidth(Column));
             Setter.template = Setter.ManageTemplate.Templates.Find(o => o.Name == displayedOptions[TemplateIndex]);
@@ -82,14 +88,18 @@ namespace AddressableManager.AddressableSetter.Editor
             }
             else
             {
-                GroupsNameIndex = EditorGUILayout.Popup("Available Groups", GroupsNameIndex, Setter.ManageGroup.GroupsNames);
+                GroupsNameIndex =
+                    EditorGUILayout.Popup("Available Groups", GroupsNameIndex, Setter.ManageGroup.GroupsNames);
                 Setter.newGroupName = Setter.ManageGroup.GroupsNames[GroupsNameIndex];
             }
+
             Utilities.ApplyModifiedProperties(MainEditor);
             EditorGUILayout.EndHorizontal();
             if (!EditorGUI.EndChangeCheck()) return;
             Setter.ManageTemplate.ApplyTemplate();
         }
-        
+
     }
 }
+
+    

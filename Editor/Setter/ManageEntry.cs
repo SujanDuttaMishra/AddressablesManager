@@ -29,18 +29,23 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public void UpdateEntry()
         {
-            if (EntriesAdded) Entries.ForEach(UpdateAdata);
+            if (Entries.Count >0) Entries.ForEach(UpdateAdata);
+
             AssetDatabase.SaveAssets();
         }
         public bool IsEntriesAdded(List<string> pathsToImport) => EntriesAdded = pathsToImport.Count == Entries?.Count;
+
         private void UpdateAdata(AddressableAssetEntry o)
         {
+            
+
             var adata = FindInLists(o, o.guid, new List<List<AData>>()
             {
                 OnStartList,
                 OnAwakeList,
                 NoAutoLoadList
             });
+
             adata?.Update(adata.autoLoad);
         }
 

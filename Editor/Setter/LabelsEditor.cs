@@ -8,10 +8,10 @@ namespace AddressableManager.AddressableSetter.Editor
     internal class LabelsEditor
     {
        
-        public Setter Setter => MainEditor.Setter;
+        public Setter Setter => (Setter)MainEditor.target;
         public static LabelsEditor Instance { get; set; }
-        public MainEditor MainEditor { get; set; }
-        private bool LabelSettings { get; set; } = true;
+        public UnityEditor.Editor MainEditor { get; set; }
+        private bool Foldout { get; set; } = true;
         private bool FolderNameIsGroupName { get; set; }
         private bool RemoveFolderLabelButton { get; set; }
         private bool AddFolderLabelButton { get; set; } = true;
@@ -24,13 +24,17 @@ namespace AddressableManager.AddressableSetter.Editor
         private List<string> CustomLabelList { get => Setter.customLabelList; set => Setter.customLabelList = value; }
         private string[] CustomLabelArray => CustomLabelList?.ToArray();
         public int GroupsNameIndex { get; private set; }
-        public LabelsEditor(MainEditor editor) { MainEditor = editor; }
+
+        public LabelsEditor(UnityEditor.Editor editor)
+        {
+            MainEditor = editor;
+        }
         internal void Init()
         {
             FolderNameIsGroupName = Utilities.CompareOrdinal(Setter.name, Setter.newGroupName);
 
-            LabelSettings = EditorGUILayout.BeginFoldoutHeaderGroup(LabelSettings, Status + " Settings");
-            if (LabelSettings)
+            Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, Status + " Settings");
+            if (Foldout)
             {
                 var headerCount = FolderNameIsGroupName ? 3 : 4;
                 EditorGUILayout.BeginVertical("Box");
@@ -63,7 +67,7 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             EditorGUI.BeginChangeCheck();
 
-            PropertyField(nameof(Setter.autoLoad), GUIContent.none, headerCount);
+            Utilities.PropertyField(MainEditor, nameof(Setter.autoLoad), GUIContent.none, headerCount);
             MainEditor.serializedObject.ApplyModifiedProperties();
             MainEditor.serializedObject.Update();
 
@@ -124,7 +128,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         private void CustomLabel(int headerCount)
         {
-            PropertyField(nameof(Setter.customLabel), GUIContent.none, headerCount);
+            Utilities.PropertyField(MainEditor,nameof(Setter.customLabel), GUIContent.none, headerCount);
             IsValidCustomLabel = !string.IsNullOrEmpty(Setter.customLabel);
             if (IsValidCustomLabel) ApplyButton = GUILayout.Button("Apply", GUILayout.MaxWidth(100));
             MainEditor.serializedObject.ApplyModifiedProperties();
@@ -166,8 +170,7 @@ namespace AddressableManager.AddressableSetter.Editor
             if (list.Count > 0) for (var i = 0; i < list.Count; i++) EditorGUILayout.PropertyField(property.GetArrayElementAtIndex(i));
             EditorGUILayout.EndVertical();
         }
-        public void PropertyField(string path, GUIContent content, int column) =>
-            EditorGUILayout.PropertyField(MainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+
     }
 
 

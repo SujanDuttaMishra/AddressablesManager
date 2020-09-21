@@ -72,6 +72,11 @@ namespace AddressableManager.AddressableSetter.Editor
             {
                 var aData = GlobalList.aDataList[i];
                 aData.Update(aData.autoLoad);
+
+                if (aData.entry.MainAsset == null) GlobalList.aDataList.Remove(aData);
+
+
+
                 // Debug.Log($" name {GlobalList.name} Count {GlobalList.aDataList.Count} aData Group {aData.group}");
             }
         }

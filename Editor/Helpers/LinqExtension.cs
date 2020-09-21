@@ -9,8 +9,8 @@ namespace AddressableManager
     {
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            if (source == null) Debug.LogException(new NullReferenceException());
-            if (action == null) Debug.LogException(new NullReferenceException());
+            if (source == null) { Debug.LogException(new NullReferenceException()); return; }
+            if (action == null) { Debug.LogException(new NullReferenceException()); return; }
             foreach (var element in source) { action(element); }
         }
         public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
@@ -21,7 +21,22 @@ namespace AddressableManager
             var index = 0;
             foreach (var element in source) action(element, index++);
         }
-        public static void ForEachWithNullCheck<T>(this List<T> list, Action<T> action) => list?.ForEach(action);
+        public static void ForEachWithNullCheck<T>(this IEnumerable<T> list, Action<T> action) => list?.ForEach(action);
+
+        public static void ForEachWithCondition<T>(this IEnumerable<T> source, Action<T> action, Func<T, bool> predicate)
+        {
+            if (source == null) {Debug.LogException(new NullReferenceException()); return;}
+            if (action == null) {Debug.LogException(new NullReferenceException()); return;}
+            if (predicate == null) { Debug.LogException(new NullReferenceException()); return; }
+
+            foreach (var element in source) if (predicate(element)) action(element); 
+           
+
+        }
+
+      
+
+
 
         public static IEnumerable<TSource> Assert<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
@@ -57,8 +72,7 @@ namespace AddressableManager
                 foreach (var item in source)
                 {
                     var (some, value) = chooser(item);
-                    if (some)
-                        yield return value;
+                    if (some) yield return value;
                 }
             }
         }

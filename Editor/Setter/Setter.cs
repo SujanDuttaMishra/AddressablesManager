@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
@@ -32,6 +33,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public AddressableAssetGroupTemplate template;
         public static AddressableAssetSettings AssetSettings { get; private set; }
         public AddressableAssetSettings assetSettings;
+        public SearchOption include = SearchOption.AllDirectories;
         public AddressableAssetGroup Group => ManageGroup.TryGetGroup();
         public bool IsGroup => ManageGroup.IsGroup();
         public string GroupName => Utilities.IsNullEmptyWhiteSpace(newGroupName) ? name : newGroupName;
@@ -97,13 +99,21 @@ namespace AddressableManager.AddressableSetter.Editor
             AssetDatabase.SaveAssets();
         }
 
-        public List<string> PathsToImport(string groupName) => Utilities.GetAssetPathsFromLocation<Setter>(groupName, new string[]
+        public List<string> PathsToImport(string groupName)
+        {
+            var exclude = new List<string>
             {
                 ".meta", ".DS_Store", $"{name}.asset",
                 $"{Constants.GlobalOnStartList}.asset",
                 $"{Constants.GlobalOnAwakeList}.asset"
-            });
+            };
 
+            Utilities.GetAsset<Setter>().ForEachWithCondition(o=> exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
+
+            var stringList = Utilities.GetAssetPathsFromLocation<Setter>(groupName, exclude, include);
+
+            return stringList;
+        }
 
 
         public void Update()

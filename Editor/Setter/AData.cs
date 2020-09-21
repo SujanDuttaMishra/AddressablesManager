@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -48,7 +49,21 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             Setter = Setter != null ? Setter : Utilities.GetSetter(group.Name);
 
-           
+
+
+            if (entry.MainAsset == null || entry.TargetAsset == null || entry.MainAsset.GetType() == typeof(Setter))
+            {
+                Setter.ManageEntry.Entries.Remove(entry);
+                Utilities.RemoveAdataFrom(this, Setter.onStartList);
+                Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
+                Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
+                Utilities.RemoveAdataFrom(this, GlobalOnStart);
+                Utilities.RemoveAdataFrom(this, GlobalOnAwake);
+
+                if (group.entries.Contains(entry)) group.RemoveAssetEntry(entry);
+
+                return;
+            }
 
             switch (load)
             {
