@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -6,6 +7,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Object = UnityEngine.Object;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -17,11 +19,13 @@ namespace AddressableManager.AddressableSetter.Editor
         public ManageGroup ManageGroup { get; set; }
 
 
+
         public string newGroupName;
         public string newTemplate;
         public string customLabel;
         public AutoLoad autoLoad;
-
+        public SearchOption include = SearchOption.AllDirectories;
+        public AssetType excludeType;
         public List<string> customLabelList;
         public List<AData> noAutoLoadList;
         public List<AData> onAwakeList;
@@ -33,7 +37,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public AddressableAssetGroupTemplate template;
         public static AddressableAssetSettings AssetSettings { get; private set; }
         public AddressableAssetSettings assetSettings;
-        public SearchOption include = SearchOption.AllDirectories;
+
         public AddressableAssetGroup Group => ManageGroup.TryGetGroup();
         public bool IsGroup => ManageGroup.IsGroup();
         public string GroupName => Utilities.IsNullEmptyWhiteSpace(newGroupName) ? name : newGroupName;
@@ -89,9 +93,11 @@ namespace AddressableManager.AddressableSetter.Editor
 
             var pathsToImport = PathsToImport(GroupName);
 
+
+
             if (pathsToImport.Count > 0)
             {
-                ManageEntry?.Entries.Clear();
+                ManageEntry.Entries = new List<AddressableAssetEntry>();
                 pathsToImport.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
                 ManageEntry?.CreateAData();
             }
@@ -108,13 +114,52 @@ namespace AddressableManager.AddressableSetter.Editor
                 $"{Constants.GlobalOnAwakeList}.asset"
             };
 
-            Utilities.GetAsset<Setter>().ForEachWithCondition(o=> exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
+            Utilities.GetAsset<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
 
             var stringList = Utilities.GetAssetPathsFromLocation<Setter>(groupName, exclude, include);
 
+
+            if (excludeType == AssetType.All) return new List<string>();
+            if (excludeType == AssetType.None) return stringList;
+
+            Exclude(stringList, AssetType.Textures);
+            Exclude(stringList, AssetType.Audio);
+            Exclude(stringList, AssetType.Particle);
+            Exclude(stringList, AssetType.Prefab);
+
+
             return stringList;
+
         }
 
+        private void Exclude(IList<string> stringList, AssetType assetType)
+        {
+            var type = typeof(Object);
+            switch (assetType)
+            {
+                case AssetType.Textures: type = typeof(Texture); break;
+                case AssetType.Audio: type = typeof(AudioClip); break;
+                case AssetType.Particle: type = typeof(ParticleSystem); break;
+                case AssetType.Prefab: type = typeof(GameObject); break;
+            }
+
+            for (int i = 0; i < stringList.Count; i++)
+            {
+                var loadAssetAtPath = AssetDatabase.LoadAssetAtPath(stringList[i], type);
+                if (loadAssetAtPath == null) continue;
+                if (type == typeof(GameObject) && excludeType.HasFlag(AssetType.Particle))
+                {
+                    var go = (GameObject)loadAssetAtPath;
+                    var hasParticle = go.GetComponentInChildren<ParticleSystem>() != null;
+                    if (hasParticle) Exclude(stringList, i);
+                }
+                Exclude(stringList, excludeType.HasFlag(assetType), i);
+            }
+        }
+
+        private static void Exclude(IList<string> stringList, bool hasFlag, int i) { if (hasFlag) stringList.Remove(stringList[i]); }
+
+        private static void Exclude(IList<string> stringList, int i) => stringList.Remove(stringList[i]);
 
         public void Update()
         {
@@ -126,13 +171,21 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             ManageLabel.RemoveLabels();
             ManageEntry.RemoveEntry();
+            ManageGroup.RemoveGroup(GroupName);
             autoLoad = AutoLoad.None;
-            if(Utilities.SettersList.Contains(this)) Utilities.SettersList.Remove(this);
+            if (Utilities.SettersList.Contains(this)) Utilities.SettersList.Remove(this);
             AssetDatabase.SaveAssets();
 
         }
 
+        public void Reset()
+        {
+            ManageLabel.RemoveLabels();
+            ManageEntry.RemoveEntry();
+            ManageGroup.RemoveGroup(GroupName);
+            Add();
 
+        }
 
     }
 }

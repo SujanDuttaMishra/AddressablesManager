@@ -45,7 +45,8 @@ namespace AddressableManager.AddressableSetter.Editor
             var pathsToImport = new List<string>();
             var isDirectory = Directory.Exists(setterPath);
             if (!isDirectory) return pathsToImport;
-            var filesToAdd = Directory.GetFiles(setterPath, "*", allDirectories);
+            var filesToAdd = Directory.EnumerateFiles(setterPath, "*", allDirectories);
+
 
             foreach (var file in filesToAdd)
             {
@@ -61,7 +62,7 @@ namespace AddressableManager.AddressableSetter.Editor
         internal static T GetOrCreateInstance<T>(string assetDataPath, string parentFolder, string newFolderName, string fileName, out string path) where T : ScriptableObject
         {
             var asset = GetAsset<T>(fileName);
-            if (asset !=null) { path = AssetDatabase.GetAssetPath(asset); return asset; }
+            if (asset != null) { path = AssetDatabase.GetAssetPath(asset); return asset; }
             path = GetOrCreateDirectory(assetDataPath, parentFolder, newFolderName);
             var instance = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(instance, AssetDatabase.GenerateUniqueAssetPath(path + $"/{fileName}.asset"));
@@ -102,9 +103,9 @@ namespace AddressableManager.AddressableSetter.Editor
         public static bool CompareOrdinal(AData aData, AData o) => CompareOrdinal(aData.ID, o.ID);
         public static bool CompareOrdinal(string a, string b) => String.CompareOrdinal(a, b) == 0;
         public static bool IsNullEmptyWhiteSpace(string str) => String.IsNullOrEmpty(str) || String.IsNullOrWhiteSpace(str);
-        public static List<AData> GlobalOnAwakeList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnAwakeList,out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
+        public static List<AData> GlobalOnAwakeList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
         public static List<AData> GlobalOnStartList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
-        public static bool LoadAssetAtPath<T>(string globalList, out T outGlobalList) where T: ScriptableObject
+        public static bool LoadAssetAtPath<T>(string globalList, out T outGlobalList) where T : ScriptableObject
         {
             return (outGlobalList = (T)AssetDatabase.LoadAssetAtPath($"Packages/com.addressablesmanager.core/Settings/{globalList}.asset", typeof(T))) != null;
         }
@@ -113,7 +114,7 @@ namespace AddressableManager.AddressableSetter.Editor
         internal static Setter GetSetter(string groupName) => GetAsset<Setter>(groupName);
         public static AddressableAssetSettings DefaultAssetSettings => AddressableAssetSettingsDefaultObject.Settings;
 
-        public static void PingButton<T>(string buttonName, T asset) where T:ScriptableObject
+        public static void PingButton<T>(string buttonName, T asset) where T : ScriptableObject
         {
             var style = new GUIStyle(GUI.skin.button)
             {
@@ -128,5 +129,14 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, GUIContent content, int column) =>
             EditorGUILayout.PropertyField(mainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+
+        public static void PropertyField(UnityEditor.Editor mainEditor, string path, List<string> header, Action action)
+        {
+            EditorGUI.BeginChangeCheck();
+            PropertyField(mainEditor, path, GUIContent.none, header.Count);
+            ApplyModifiedProperties(mainEditor);
+            if (EditorGUI.EndChangeCheck()) action();
+
+        }
     }
 }

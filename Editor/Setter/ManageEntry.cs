@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -13,7 +11,7 @@ namespace AddressableManager.AddressableSetter.Editor
         private List<AData> OnAwakeList { get => Setter.onAwakeList; set => Setter.onAwakeList = value; }
         private List<AData> OnStartList { get => Setter.onStartList; set => Setter.onStartList = value; }
         private List<AData> NoAutoLoadList { get => Setter.noAutoLoadList; set => Setter.noAutoLoadList = value; }
-        public List<AddressableAssetEntry> Entries => Setter.Group != null && Setter.Group.entries.Count > 0 ? Setter.Group.entries.ToList() : new List<AddressableAssetEntry>();
+        public List<AddressableAssetEntry> Entries { get; set; }
         public ManageEntry(Setter setter) { Setter = setter; }
         private Setter Setter { get; }
         public bool EntriesAdded { get; set; }
@@ -29,11 +27,17 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public void UpdateEntry()
         {
-            if (Entries.Count >0) Entries.ForEach(UpdateAdata);
+            if (Entries.Count > 0)
+            {
+              //  VerifyGroupEntries(Setter.Group);
+                Entries.ForEach(UpdateAdata);
+            }
 
             AssetDatabase.SaveAssets();
         }
-        public bool IsEntriesAdded(List<string> pathsToImport) => EntriesAdded = pathsToImport.Count == Entries?.Count;
+        public bool IsEntriesAdded(List<string> pathsToImport) => EntriesAdded = Entries != null && pathsToImport.Count == Entries.Count;
+
+        public void VerifyGroupEntries(AddressableAssetGroup group) => group.entries?.ForEachWithCondition(o => group.RemoveAssetEntry(o), o => !Entries.Contains(o));
 
         private void UpdateAdata(AddressableAssetEntry o)
         {
@@ -75,6 +79,7 @@ namespace AddressableManager.AddressableSetter.Editor
             NoAutoLoadList.Clear();
             OnStartList.Clear();
             OnAwakeList.Clear();
+
         }
 
       
