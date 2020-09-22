@@ -1,35 +1,36 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageTemplate
     {
 
-        public List<string> TemplatesNames => Templates.ConvertAll(o => o.Name);
         public List<AddressableAssetGroupTemplate> Templates { get; set; } = new List<AddressableAssetGroupTemplate>();
-        private List<string> AllProfile { get; set; }
+        public List<string> AllProfile => Setter.assetSettings.profileSettings.GetAllProfileNames();
         private Setter Setter { get; }
         public ManageTemplate(Setter setter)
         {
             Setter = setter;
-           
         }
 
-        public void InitTemplate()
-        {
-           
-            AllProfile = Setter.assetSettings.profileSettings.GetAllProfileNames();
-            ApplyTemplate();
+        public void InitTemplate() => LoadTemplateFromPackagePath(new string[] { "Remote", "Local", "Default" });
 
+        private void LoadTemplateFromPackagePath(IEnumerable<string> templateName)
+        {
+            templateName.ForEach(o =>
+            {
+                Utilities.LoadAssetFromPackagePath<AddressableAssetGroupTemplate>(Constants.AddressablesManagerSettings, o, out var asset);
+                if (!AllProfile.Contains(asset.Name)) Setter.assetSettings.profileSettings.AddProfile(asset.Name, null);
+                Templates.AddIfNotContains(asset);
+            });
+            ApplyTemplate();
         }
 
         public void ApplyTemplate()
         {
-            SetTemplates(new[] { "Remote", "Local" });
-            if (Setter.template == null) Setter.template = Templates[0];
-            if (Setter.assetSettings == null || Setter.template == null) return;
-            if (!Setter.assetSettings.GroupTemplateObjects.Contains(Setter.template)) Setter.assetSettings.GroupTemplateObjects.Add(Setter.template);
+            if (Setter.template == null && Templates.Count > 0) Setter.template = Templates[0];
             if (Setter.ManageGroup.IsGroup()) Setter.template.ApplyToAddressableAssetGroup(Setter.ManageGroup.Group);
             if (!AllProfile.Contains(Setter.template.Name)) Setter.assetSettings.profileSettings.AddProfile(Setter.template.Name, null);
             Setter.assetSettings.name = Constants.AddressableAssetSettingsName;
@@ -37,14 +38,23 @@ namespace AddressableManager.AddressableSetter.Editor
             Setter.assetSettings.AddLabel(Constants.OnStart);
             Setter.assetSettings.AddLabel(Constants.OnAwake);
             Setter.assetSettings.activeProfileId = Setter.assetSettings.profileSettings.GetProfileId(Setter.template.Name);
-
         }
-        public void SetTemplates(string[] names) => names.ForEach(AddTemplates);
-        public void AddTemplates(string names)
+
+
+        public void AddNewTemplates(string names)
         {
-            if (Utilities.IsNullEmptyWhiteSpace(names)) return;
-            var template = Utilities.GetOrCreateInstances<AddressableAssetGroupTemplate>(names);
-            if (!Templates.Contains(template)) Templates.Add(template);
+            if (GetTemplate(names)) return;
+            Setter.AssetSettings.CreateAndAddGroupTemplate(names, "Pack assets into asset bundles.", typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+            var template = Utilities.GetAsset<AddressableAssetGroupTemplate>(names);
+            Templates.AddIfNotContains(template);
+        }
+
+        private bool GetTemplate(string names)
+        {
+            var template = Utilities.GetAsset<AddressableAssetGroupTemplate>(names);
+            if (template == null) return false;
+            Templates.AddIfNotContains(template);
+            return true;
         }
     }
 }

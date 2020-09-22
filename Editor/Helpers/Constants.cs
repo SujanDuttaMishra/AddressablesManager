@@ -15,5 +15,7 @@
         public const string Asset = "Assets";
         public const string GlobalOnAwakeList = "GlobalOnAwakeList";
         public const string GlobalOnStartList = "GlobalOnStartList";
+        public const string AddressablesManager = "Packages/com.addressablesmanager.core/";
+        public const string AddressablesManagerSettings = AddressablesManager+"Settings/";
     }
 }

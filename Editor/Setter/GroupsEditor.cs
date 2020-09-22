@@ -60,13 +60,14 @@ namespace AddressableManager.AddressableSetter.Editor
 
             EditorGUILayout.BeginHorizontal();
             Utilities.PropertyField(MainEditor, nameof(Setter.newTemplate), Column);
+
             if (Button)
             {
-                Setter.ManageTemplate.AddTemplates(Setter.newTemplate);
+                Setter.ManageTemplate.AddNewTemplates(Setter.newTemplate);
                 Setter.template = Setter.ManageTemplate.Templates.Find(o => o.Name == Setter.newTemplate);
             }
 
-            var displayedOptions = Setter.ManageTemplate.TemplatesNames.ToArray();
+            var displayedOptions = Setter.ManageTemplate.Templates.ConvertAll(o=>o.Name).ToArray();
             TemplateIndex = EditorGUILayout.Popup(TemplateIndex, displayedOptions, Utilities.MaxWidth(Column));
             Setter.template = Setter.ManageTemplate.Templates.Find(o => o.Name == displayedOptions[TemplateIndex]);
 

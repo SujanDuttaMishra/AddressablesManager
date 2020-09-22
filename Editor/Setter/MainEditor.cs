@@ -45,7 +45,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void Lists(string assetPath)
         {
-            if(Setter.AssetCount <= 0) return;
+            if (Setter.AssetCount <= 0) return;
             EditorGUI.BeginChangeCheck();
             var status = $"Asset Found @ {assetPath} Asset Count : {Setter.AssetCount}";
             var autoUpdate = ListsEditor.Init(status, new Dictionary<string, Tuple<List<AData>, AutoLoad>>
@@ -59,6 +59,6 @@ namespace AddressableManager.AddressableSetter.Editor
         }
 
 
-        
+
     }
 }

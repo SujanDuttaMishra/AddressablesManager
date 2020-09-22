@@ -114,7 +114,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 $"{Constants.GlobalOnAwakeList}.asset"
             };
 
-            Utilities.GetAsset<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
+            Utilities.GetAssets<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
 
             var stringList = Utilities.GetAssetPathsFromLocation<Setter>(groupName, exclude, include);
 

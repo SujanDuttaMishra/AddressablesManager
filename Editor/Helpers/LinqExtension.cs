@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
 namespace AddressableManager
@@ -22,21 +23,38 @@ namespace AddressableManager
             foreach (var element in source) action(element, index++);
         }
         public static void ForEachWithNullCheck<T>(this IEnumerable<T> list, Action<T> action) => list?.ForEach(action);
-
-        public static void ForEachWithCondition<T>(this IEnumerable<T> source, Action<T> action, Func<T, bool> predicate)
+        public static void ForEachWithRecursiveNullCheck<T>(this IEnumerable<T> source, Action<T> action)
         {
-            if (source == null) {Debug.LogException(new NullReferenceException()); return;}
-            if (action == null) {Debug.LogException(new NullReferenceException()); return;}
-            if (predicate == null) { Debug.LogException(new NullReferenceException()); return; }
-
-            foreach (var element in source) if (predicate(element)) action(element); 
-           
+            if (source == null) return;
+            foreach (var element in source)
+            {
+                if (element != null) action(element);
+            }
 
         }
 
-      
+        public static void ForEachWithCondition<T>(this IEnumerable<T> source, Action<T> action, Func<T, bool> predicate)
+        {
+            if (source == null) { Debug.LogException(new NullReferenceException()); return; }
+            if (action == null) { Debug.LogException(new NullReferenceException()); return; }
+            if (predicate == null) { Debug.LogException(new NullReferenceException()); return; }
+
+            foreach (var element in source) if (predicate(element)) action(element);
 
 
+        }
+
+        public static void AddIfNotContains<T>(this ICollection<T> source, T item)
+        {
+            if (source == null) { Debug.LogException(new NullReferenceException()); return; }
+            if (item != null && !source.Contains(item)) source.Add(item);
+        }
+
+        public static void RemoveIfContains<T>(this ICollection<T> source, T item)
+        {
+            if (source == null) { Debug.LogException(new NullReferenceException()); return; }
+            if (source.Contains(item)) source.Remove(item);
+        }
 
         public static IEnumerable<TSource> Assert<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {

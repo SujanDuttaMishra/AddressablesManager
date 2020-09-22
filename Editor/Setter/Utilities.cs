@@ -71,10 +71,11 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public static T CreateNew<T>(string assetName, string dataPath) where T : ScriptableObject
         {
-            var asset = ScriptableObject.CreateInstance<T>();
+            if (IsNullEmptyWhiteSpace(assetName)) throw new Exception("name to create is null or blank");
             var defaultPath = dataPath + $"/{assetName}.asset";
             var groupTemplatePath = AssetDatabase.GenerateUniqueAssetPath(Constants.AddressableAssetsDataPath + $"/AssetGroupTemplates/{assetName}.asset");
             var path = typeof(T) == typeof(AddressableAssetGroupTemplate) ? groupTemplatePath : defaultPath;
+            var asset = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(asset, path);
             var instance = GetAsset<T>(assetName);
             AssetDatabase.SaveAssets();
@@ -82,8 +83,8 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public static string GetOrCreateDirectory(string assetDataPath, string parentFolder, string newFolderName) => !AssetDatabase.IsValidFolder(assetDataPath) ? AssetDatabase.GUIDToAssetPath(AssetDatabase.CreateFolder(parentFolder, newFolderName)) : assetDataPath;
         public static T GetAsset<T>(string assetName, out List<T> allAssetOfType) where T : ScriptableObject => (allAssetOfType = Resources.FindObjectsOfTypeAll<T>().ToList()).Find(o => o.name == assetName);
-        public static T GetAsset<T>(string assetName) where T : ScriptableObject => GetAsset<T>().Find(o => o.name == assetName);
-        public static List<T> GetAsset<T>() where T : ScriptableObject => Resources.FindObjectsOfTypeAll<T>().ToList();
+        public static T GetAsset<T>(string assetName) where T : ScriptableObject => GetAssets<T>().Find(o => o.name == assetName);
+        public static List<T> GetAssets<T>() where T : ScriptableObject => Resources.FindObjectsOfTypeAll<T>().ToList();
 
         public static string GetAssetPath<T>(string fileName) where T : ScriptableObject => AssetDatabase.GetAssetPath(GetAsset<T>(fileName));
         public static string GetAssetPath<T>(T asset) where T : ScriptableObject => AssetDatabase.GetAssetPath(asset);
@@ -103,17 +104,12 @@ namespace AddressableManager.AddressableSetter.Editor
         public static bool CompareOrdinal(AData aData, AData o) => CompareOrdinal(aData.ID, o.ID);
         public static bool CompareOrdinal(string a, string b) => String.CompareOrdinal(a, b) == 0;
         public static bool IsNullEmptyWhiteSpace(string str) => String.IsNullOrEmpty(str) || String.IsNullOrWhiteSpace(str);
-        public static List<AData> GlobalOnAwakeList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
-        public static List<AData> GlobalOnStartList => LoadAssetAtPath<GlobalList>(Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
-        public static bool LoadAssetAtPath<T>(string globalList, out T outGlobalList) where T : ScriptableObject
-        {
-            return (outGlobalList = (T)AssetDatabase.LoadAssetAtPath($"Packages/com.addressablesmanager.core/Settings/{globalList}.asset", typeof(T))) != null;
-        }
-
-        public static List<Setter> SettersList => LoadAssetAtPath<SetterList>(nameof(SetterList), out var globalList) ? globalList.settersList : GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
+        public static List<AData> GlobalOnAwakeList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings,Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
+        public static List<AData> GlobalOnStartList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
+        public static List<Setter> SettersList => LoadAssetFromPackagePath<SetterList>(Constants.AddressablesManagerSettings, nameof(SetterList), out var globalList) ? globalList.settersList : GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
+        public static bool LoadAssetFromPackagePath<T>(string packagesPath, string assetName, out T outAsset) where T : ScriptableObject => (outAsset = (T)AssetDatabase.LoadAssetAtPath($"{packagesPath}{assetName}.asset", typeof(T))) != null;
         internal static Setter GetSetter(string groupName) => GetAsset<Setter>(groupName);
         public static AddressableAssetSettings DefaultAssetSettings => AddressableAssetSettingsDefaultObject.Settings;
-
         public static void PingButton<T>(string buttonName, T asset) where T : ScriptableObject
         {
             var style = new GUIStyle(GUI.skin.button)
@@ -125,11 +121,8 @@ namespace AddressableManager.AddressableSetter.Editor
             if (string.IsNullOrEmpty(buttonName)) return;
             if (Button(buttonName, style, 100, 25) && asset != null) EditorGUIUtility.PingObject(asset);
         }
-
-
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, GUIContent content, int column) =>
             EditorGUILayout.PropertyField(mainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
-
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, List<string> header, Action action)
         {
             EditorGUI.BeginChangeCheck();
@@ -138,5 +131,7 @@ namespace AddressableManager.AddressableSetter.Editor
             if (EditorGUI.EndChangeCheck()) action();
 
         }
+
+
     }
 }
