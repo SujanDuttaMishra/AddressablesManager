@@ -31,6 +31,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public List<AData> onAwakeList;
         public List<AData> onStartList;
 
+        public List<string> PathsToImport { get;  set; }
 
         public List<AssetLabelReference> labelReferences;
 
@@ -45,7 +46,6 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public Setter()
         {
-
             ManageTemplate = new ManageTemplate(this);
             ManageEntry = new ManageEntry(this);
             ManageLabel = new ManageLabel(this);
@@ -70,42 +70,32 @@ namespace AddressableManager.AddressableSetter.Editor
             var selection = AssetDatabase.GetAssetPath(Selection.activeObject);
             var fileName = Path.GetFileNameWithoutExtension(selection);
             if (!Utilities.GetAsset<Setter>(fileName)) Utilities.CreateNew<Setter>(fileName, selection);
-
-
         }
 
 
-        private void OnEnable()
-        {
-            ManageTemplate.InitTemplate();
-
-
-        }
-
-
+        private void OnEnable() => ManageTemplate.InitTemplate();
         public void Add()
         {
-
             noAutoLoadList = new List<AData>();
             onAwakeList = new List<AData>();
             onStartList = new List<AData>();
+          
 
-
-            var pathsToImport = PathsToImport(GroupName);
-
-
-
-            if (pathsToImport.Count > 0)
+            if (ReCalculatePathToImport(out var outPathList))
             {
                 ManageEntry.Entries = new List<AddressableAssetEntry>();
-                pathsToImport.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
+                outPathList.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
                 ManageEntry?.CreateAData();
             }
             if (!Utilities.SettersList.Contains(this)) Utilities.SettersList.Add(this);
+
+            PathsToImport = outPathList;
             AssetDatabase.SaveAssets();
         }
 
-        public List<string> PathsToImport(string groupName)
+        public bool ReCalculatePathToImport(out List<string> outPathList) => (outPathList = ExcludeFromSetter.Exclude(GetPathsToImport(), this)).Count > 0;
+
+        public List<string> GetPathsToImport()
         {
             var exclude = new List<string>
             {
@@ -113,53 +103,11 @@ namespace AddressableManager.AddressableSetter.Editor
                 $"{Constants.GlobalOnStartList}.asset",
                 $"{Constants.GlobalOnAwakeList}.asset"
             };
-
             Utilities.GetAssets<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
-
-            var stringList = Utilities.GetAssetPathsFromLocation<Setter>(groupName, exclude, include);
-
-
-            if (excludeType == AssetType.All) return new List<string>();
-            if (excludeType == AssetType.None) return stringList;
-
-            Exclude(stringList, AssetType.Textures);
-            Exclude(stringList, AssetType.Audio);
-            Exclude(stringList, AssetType.Particle);
-            Exclude(stringList, AssetType.Prefab);
-
-
-            return stringList;
-
+            
+            return Utilities.GetAssetPathsFromLocation<Setter>(GroupName, exclude, include);
         }
 
-        private void Exclude(IList<string> stringList, AssetType assetType)
-        {
-            var type = typeof(Object);
-            switch (assetType)
-            {
-                case AssetType.Textures: type = typeof(Texture); break;
-                case AssetType.Audio: type = typeof(AudioClip); break;
-                case AssetType.Particle: type = typeof(ParticleSystem); break;
-                case AssetType.Prefab: type = typeof(GameObject); break;
-            }
-
-            for (int i = 0; i < stringList.Count; i++)
-            {
-                var loadAssetAtPath = AssetDatabase.LoadAssetAtPath(stringList[i], type);
-                if (loadAssetAtPath == null) continue;
-                if (type == typeof(GameObject) && excludeType.HasFlag(AssetType.Particle))
-                {
-                    var go = (GameObject)loadAssetAtPath;
-                    var hasParticle = go.GetComponentInChildren<ParticleSystem>() != null;
-                    if (hasParticle) Exclude(stringList, i);
-                }
-                Exclude(stringList, excludeType.HasFlag(assetType), i);
-            }
-        }
-
-        private static void Exclude(IList<string> stringList, bool hasFlag, int i) { if (hasFlag) stringList.Remove(stringList[i]); }
-
-        private static void Exclude(IList<string> stringList, int i) => stringList.Remove(stringList[i]);
 
         public void Update()
         {
@@ -177,7 +125,6 @@ namespace AddressableManager.AddressableSetter.Editor
             AssetDatabase.SaveAssets();
 
         }
-
         public void Reset()
         {
             ManageLabel.RemoveLabels();
@@ -186,6 +133,5 @@ namespace AddressableManager.AddressableSetter.Editor
             Add();
 
         }
-
     }
 }

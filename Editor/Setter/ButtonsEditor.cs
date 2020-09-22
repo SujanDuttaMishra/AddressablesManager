@@ -20,11 +20,14 @@ namespace AddressableManager.AddressableSetter.Editor
                 alignment = TextAnchor.MiddleCenter
             };
 
-            if (!Setter.ManageEntry.IsEntriesAdded(Setter.PathsToImport(Setter.GroupName)))
+
+
+            if (!Setter.ManageEntry.IsEntriesAdded(Setter.PathsToImport))
             {
+
                 AddButton = Utilities.Button("Add", style, 100, 40);
-                if (!AddButton) return;
-                Setter.Add();
+                if (AddButton) Setter.Add();
+
             }
             else if (Setter.IsGroup)
             {

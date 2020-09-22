@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
+
 namespace AddressableManager.AddressableSetter.Editor
 {
     internal static class Utilities
@@ -104,7 +105,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public static bool CompareOrdinal(AData aData, AData o) => CompareOrdinal(aData.ID, o.ID);
         public static bool CompareOrdinal(string a, string b) => String.CompareOrdinal(a, b) == 0;
         public static bool IsNullEmptyWhiteSpace(string str) => String.IsNullOrEmpty(str) || String.IsNullOrWhiteSpace(str);
-        public static List<AData> GlobalOnAwakeList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings,Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
+        public static List<AData> GlobalOnAwakeList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
         public static List<AData> GlobalOnStartList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
         public static List<Setter> SettersList => LoadAssetFromPackagePath<SetterList>(Constants.AddressablesManagerSettings, nameof(SetterList), out var globalList) ? globalList.settersList : GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
         public static bool LoadAssetFromPackagePath<T>(string packagesPath, string assetName, out T outAsset) where T : ScriptableObject => (outAsset = (T)AssetDatabase.LoadAssetAtPath($"{packagesPath}{assetName}.asset", typeof(T))) != null;
@@ -118,7 +119,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 fontSize = 11
             };
 
-            if (string.IsNullOrEmpty(buttonName)) return;
+            if (String.IsNullOrEmpty(buttonName)) return;
             if (Button(buttonName, style, 100, 25) && asset != null) EditorGUIUtility.PingObject(asset);
         }
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, GUIContent content, int column) =>
@@ -135,3 +136,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
     }
 }
+
+
+
+
