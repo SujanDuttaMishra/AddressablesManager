@@ -4,3 +4,4 @@ theme: jekyll-theme-merlot
 url: "https://github.com/SujanDuttaMishra/AddressablesManager" 
 plugins:
   - jekyll-sitemap
+  - jekyll-seo-tag
