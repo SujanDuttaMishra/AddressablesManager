@@ -76,9 +76,9 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             Utilities.RemoveAdataFrom(OnStartList, Utilities.GlobalOnStartList);
             Utilities.RemoveAdataFrom(OnAwakeList, Utilities.GlobalOnAwakeList);
-            NoAutoLoadList.Clear();
-            OnStartList.Clear();
-            OnAwakeList.Clear();
+            NoAutoLoadList?.Clear();
+            OnStartList?.Clear();
+            OnAwakeList?.Clear();
 
         }
 

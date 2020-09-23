@@ -64,6 +64,12 @@ namespace AddressableManager.AddressableSetter.Editor
                     return typeof(ParticleSystem);
                 case AssetType.Prefab:
                     return typeof(GameObject);
+                case AssetType.Shader:
+                    return typeof(Shader);
+                case AssetType.Sprite:
+                    return typeof(Sprite);
+                case AssetType.SkyBox:
+                    return typeof(Skybox);
                 default:
                     return null;
             }

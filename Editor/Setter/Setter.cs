@@ -99,7 +99,7 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             var exclude = new List<string>
             {
-                ".meta", ".DS_Store", $"{name}.asset",
+                ".cs",".asmdef",".meta", ".DS_Store", $"{name}.asset",
                 $"{Constants.GlobalOnStartList}.asset",
                 $"{Constants.GlobalOnAwakeList}.asset"
             };

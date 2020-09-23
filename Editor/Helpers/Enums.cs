@@ -12,14 +12,9 @@ namespace AddressableManager
         Audio = 2,
         Particle = 4,
         Prefab = 8,
-        //TexturesAudioParticle = Textures | Audio| Particle,
-        //TexturesAudioPrefab = Textures | Audio | Prefab,
-        //TexturesAudio = Textures | Audio,
-        //TexturesPrefab = Textures | Prefab,
-        //TexturesParticle = Textures | Particle,
-        //AudioParticle =   Audio| Particle,
-        //AudioPrefab = Audio | Prefab,
-        //ParticlePrefab = Particle | Prefab,
+        Shader = 16,
+        Sprite=32,
+        SkyBox = 64,
 
         All = ~0,
     }

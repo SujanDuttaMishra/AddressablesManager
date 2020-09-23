@@ -42,6 +42,8 @@ namespace AddressableManager.AddressableSetter.Editor
         public static List<string> GetAssetPathsFromLocation<T>(string folderSetterName, List<string> toExclude, SearchOption allDirectories) where T : ScriptableObject
         {
             var setterPath = GetAssetPath<T>(folderSetterName);
+            if (IsNullEmptyWhiteSpace(setterPath)) return new List<string>();
+
             setterPath = Path.GetDirectoryName(setterPath);
             var pathsToImport = new List<string>();
             var isDirectory = Directory.Exists(setterPath);
@@ -97,7 +99,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public static void RemoveLabelFrom(string label, AddressableAssetSettings settings)
         { if (label != Constants.OnStart && label != Constants.OnAwake && IsLabelIn(label, settings)) settings.RemoveLabel(label); }
         public static List<string> LabelsToStringList(AddressableAssetSettings settings) => settings.GetLabels();
-        public static void RemoveAdataFrom(List<AData> list, List<AData> globalList) => list.ForEach(o => RemoveAdataFrom(o, globalList));
+        public static void RemoveAdataFrom(List<AData> list, List<AData> globalList) => list?.ForEach(o => RemoveAdataFrom(o, globalList));
         public static void RemoveAdataFrom(AData aData, List<AData> list) { if (FindAdataIn(list, aData, out var outAdata)) list.Remove(outAdata); }
         public static void AddAdataTo(AData aData, List<AData> list) { if (!FindAdataIn(list, aData)) list.Add(aData); }
         public static bool FindAdataIn(List<AData> list, AData aData, out AData outAData) => (outAData = list.Find(o => CompareOrdinal(aData, o))) != null;
