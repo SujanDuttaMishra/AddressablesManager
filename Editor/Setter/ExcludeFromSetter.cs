@@ -16,36 +16,57 @@ namespace AddressableManager.AddressableSetter.Editor
                 case AssetType.None: return stringList;
                 case AssetType.All: return new List<string>();
             }
-            var strings = Enum.GetNames(typeof(AssetType));
-            if (!GetExcludeValues(excludeType, out var type)) return stringList;
-            for (var i = 0; i < strings.Length; i++)
+            GetExcludeType(excludeType, out var types);
+           
+            types.ForEachWithRecursiveNullCheck(o=>
             {
-                Enum.TryParse(strings[i], true, out AssetType value);
-                if (value == AssetType.All || value == AssetType.None) continue;
-                if (excludeType.HasFlag(value)) stringList = Exclude(stringList, type);
-                if (type == typeof(GameObject) && excludeType.HasFlag(AssetType.Particle)) stringList = Exclude(stringList);
-            }
+                stringList = Exclude(stringList, o);
+
+            });
+            
             return stringList;
         }
         private static List<string> Exclude(IEnumerable<string> stringList, Type type) => stringList.Where(o => AssetDatabase.LoadAssetAtPath(o, type) == null).ToList();
 
-        private static List<string> Exclude(IEnumerable<string> stringList) => stringList.Where(o => LoadAssetAtPath(o).GetComponentInChildren<ParticleSystem>() == null ).ToList();
+        private static List<string> Exclude(IEnumerable<string> stringList) => stringList.Where(o => ((GameObject)AssetDatabase.LoadAssetAtPath(o, typeof(GameObject))).GetComponentInChildren<ParticleSystem>() == null).ToList();
 
-        private static GameObject LoadAssetAtPath(string o) => (GameObject)AssetDatabase.LoadAssetAtPath(o,typeof(GameObject));
+        private static GameObject LoadAssetAtPath(string o) => (GameObject)AssetDatabase.LoadAssetAtPath(o, typeof(GameObject));
 
-        private static bool GetExcludeValues(AssetType excludeType, out Type type)
+        private static bool GetExcludeType(AssetType excludeType, out List<Type> types)
         {
-            type = null;
-            switch (excludeType)
+            types = new List<Type>();
+
+            foreach (AssetType value in Enum.GetValues(typeof(AssetType)))
             {
-                case AssetType.Textures: type = typeof(Texture); break;
-                case AssetType.Audio: type = typeof(AudioClip); break;
-                case AssetType.Particle: type = typeof(ParticleSystem); break;
-                case AssetType.Prefab: type = typeof(GameObject); break;
+                if (value == AssetType.None || value == AssetType.All) continue;
+                PopulateTypes(excludeType, types, value);
             }
 
-            return type!= null;
+            return types != null;
         }
 
+        private static void PopulateTypes(AssetType excludeType, ICollection<Type> types, AssetType assetType)
+        {
+            var type = GetMatchingType(assetType);
+            if (excludeType.HasFlag(assetType)) types.Add(type); else types.Remove(type);
+
+        }
+
+        private static Type GetMatchingType(AssetType assetType)
+        {
+            switch (assetType)
+            {
+                case AssetType.Textures:
+                    return typeof(Texture);
+                case AssetType.Audio:
+                    return typeof(AudioClip);
+                case AssetType.Particle:
+                    return typeof(ParticleSystem);
+                case AssetType.Prefab:
+                    return typeof(GameObject);
+                default:
+                    return null;
+            }
+        }
     }
 }

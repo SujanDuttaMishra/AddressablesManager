@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.GUI;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
 namespace AddressableManager.AddressableSetter.Editor
@@ -32,9 +35,11 @@ namespace AddressableManager.AddressableSetter.Editor
                 EditorGUILayout.BeginHorizontal("box");
                 Utilities.PropertyField(MainEditor, nameof(Setter.include), header, Setter.Reset);
                 EnumFlagsField(MainEditor,header, Setter.Reset);
+              
                 Utilities.ApplyModifiedProperties(MainEditor);
                 EditorGUILayout.EndHorizontal();
 
+                
 
 
                 EditorGUILayout.EndVertical();
@@ -44,6 +49,11 @@ namespace AddressableManager.AddressableSetter.Editor
 
 
         }
+
+
+
+
+
         private void Headers(IEnumerable<string> headers, int column)
         {
             EditorGUILayout.BeginHorizontal();
@@ -60,6 +70,10 @@ namespace AddressableManager.AddressableSetter.Editor
 
 
         }
+
+
+
+
     }
 
 

@@ -8,10 +8,18 @@ namespace AddressableManager
     public enum AssetType
     {
         None = 0,
-        Textures = 1 << 0,
-        Audio = 1 << 1,
-        Particle = 1 << 2,
-        Prefab = 1 << 3,
+        Textures = 1,
+        Audio = 2,
+        Particle = 4,
+        Prefab = 8,
+        //TexturesAudioParticle = Textures | Audio| Particle,
+        //TexturesAudioPrefab = Textures | Audio | Prefab,
+        //TexturesAudio = Textures | Audio,
+        //TexturesPrefab = Textures | Prefab,
+        //TexturesParticle = Textures | Particle,
+        //AudioParticle =   Audio| Particle,
+        //AudioPrefab = Audio | Prefab,
+        //ParticlePrefab = Particle | Prefab,
 
         All = ~0,
     }
