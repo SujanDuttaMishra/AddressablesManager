@@ -1,3 +1,6 @@
 title: Addressable Manager
 description: Easy Addressable from Folder 
 theme: jekyll-theme-merlot
+url: "https://github.com/SujanDuttaMishra/AddressablesManager" 
+plugins:
+  - jekyll-sitemap
