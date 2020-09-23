@@ -22,16 +22,14 @@
 title: Addressable Manager
 description: Easy Addressable from Folder 
 theme: jekyll-theme-merlot
-url: "https://github.com/SujanDuttaMishra/AddressablesManager" 
+url: "https://github.com/SujanDuttaMishra" 
 plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-feed
 
 
-baseurl: "" # the subpath of your site, e.g. /blog
-
-
+baseurl: "/AddressablesManager" 
 github_username:  SujanDuttaMishra
 
 # Build settings
