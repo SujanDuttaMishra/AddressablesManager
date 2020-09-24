@@ -17,8 +17,7 @@
 
 #### Addressable Manager
 * Addressable Manager takes scriptable objects generates and configured via setter and Easily instantiate & track asset via async operation. uses unitask instead of system.threading to make it compatible with WebGl.
-* *** Need to do build etc as instructed in addressable system by unity
-
+* *** Need to do build etc as instructed in addressable system by unity***
 
 ***
 
