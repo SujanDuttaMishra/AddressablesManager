@@ -89,11 +89,11 @@ namespace AddressableManager.AddressableSetter.Editor
             }
             if (!Utilities.SettersList.Contains(this)) Utilities.SettersList.Add(this);
 
-            PathsToImport = outPathList;
+            
             AssetDatabase.SaveAssets();
         }
 
-        public bool ReCalculatePathToImport(out List<string> outPathList) => (outPathList = ExcludeFromSetter.Exclude(GetPathsToImport(), this)).Count > 0;
+        public bool ReCalculatePathToImport(out List<string> outPathList) => (PathsToImport = outPathList = ExcludeFromSetter.Exclude(GetPathsToImport(), this)).Count > 0;
 
         public List<string> GetPathsToImport()
         {
@@ -127,6 +127,8 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public void Reset()
         {
+            if (!IsGroup || !ManageEntry.EntriesAdded) return;
+
             ManageLabel.RemoveLabels();
             ManageEntry.RemoveEntry();
             ManageGroup.RemoveGroup(GroupName);

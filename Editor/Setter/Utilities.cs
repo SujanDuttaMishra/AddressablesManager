@@ -107,9 +107,14 @@ namespace AddressableManager.AddressableSetter.Editor
         public static bool CompareOrdinal(AData aData, AData o) => CompareOrdinal(aData.ID, o.ID);
         public static bool CompareOrdinal(string a, string b) => String.CompareOrdinal(a, b) == 0;
         public static bool IsNullEmptyWhiteSpace(string str) => String.IsNullOrEmpty(str) || String.IsNullOrWhiteSpace(str);
-        public static List<AData> GlobalOnAwakeList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnAwakeList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList).aDataList;
-        public static List<AData> GlobalOnStartList => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnStartList, out var globalList) ? globalList.aDataList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList).aDataList;
-        public static List<Setter> SettersList => LoadAssetFromPackagePath<SetterList>(Constants.AddressablesManagerSettings, nameof(SetterList), out var globalList) ? globalList.settersList : GetOrCreateInstances<SetterList>(nameof(SetterList)).settersList;
+
+        public static GlobalList GlobalOnAwake => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnAwakeList, out var globalList) ? globalList : GlobalList.GetOrCreateInstance(Constants.GlobalOnAwakeList);
+        public static List<AData> GlobalOnAwakeList { get => GlobalOnAwake.aDataList; set => GlobalOnAwake.aDataList = value; }
+        public static GlobalList GlobalOnStart => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnStartList, out var globalList) ? globalList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList);
+        public static List<AData> GlobalOnStartList { get => GlobalOnStart.aDataList; set => GlobalOnStart.aDataList = value; }
+        public static SetterList Setters => LoadAssetFromPackagePath<SetterList>(Constants.AddressablesManagerSettings, nameof(SetterList), out var setterList) ? setterList : GetOrCreateInstances<SetterList>(nameof(SetterList));
+        public static List<Setter> SettersList { get => Setters.settersList; set => Setters.settersList = value; }
+
         public static bool LoadAssetFromPackagePath<T>(string packagesPath, string assetName, out T outAsset) where T : ScriptableObject => (outAsset = (T)AssetDatabase.LoadAssetAtPath($"{packagesPath}{assetName}.asset", typeof(T))) != null;
         internal static Setter GetSetter(string groupName) => GetAsset<Setter>(groupName);
         public static AddressableAssetSettings DefaultAssetSettings => AddressableAssetSettingsDefaultObject.Settings;
@@ -124,6 +129,20 @@ namespace AddressableManager.AddressableSetter.Editor
             if (String.IsNullOrEmpty(buttonName)) return;
             if (Button(buttonName, style, 100, 25) && asset != null) EditorGUIUtility.PingObject(asset);
         }
+        public static void PingButton<T>(Rect rect, string buttonName, T asset, float width, float height) where T : ScriptableObject
+        {
+            var style = new GUIStyle(GUI.skin.button)
+            {
+                hover = { textColor = Color.green },
+                fontSize = 11,
+                fixedHeight = height,
+                fixedWidth = width
+            };
+
+            if (GUI.Button(rect, buttonName, style) && asset != null) EditorGUIUtility.PingObject(asset);
+
+
+        }
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, GUIContent content, int column) =>
             EditorGUILayout.PropertyField(mainEditor.serializedObject.FindProperty(path), content, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
         public static void PropertyField(UnityEditor.Editor mainEditor, string path, List<string> header, Action action)
@@ -132,10 +151,13 @@ namespace AddressableManager.AddressableSetter.Editor
             PropertyField(mainEditor, path, GUIContent.none, header.Count);
             ApplyModifiedProperties(mainEditor);
             if (EditorGUI.EndChangeCheck()) action();
-
         }
-
-
+        public static void RemoveNullOrEmptyEntries()
+        {
+            SettersList = SettersList.Where(o => o != null && o.IsGroup).ToList();
+            GlobalOnAwakeList = GlobalOnAwakeList.Where(o => !o.CheckEntryExist()).ToList();
+            GlobalOnStartList = GlobalOnStartList.Where(o => !o.CheckEntryExist()).ToList();
+        }
     }
 }
 

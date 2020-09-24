@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace AddressableManager.AddressableSetter.Editor
@@ -22,7 +23,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
 
 
-            if (!Setter.ManageEntry.IsEntriesAdded(Setter.PathsToImport))
+            if (!Setter.ManageEntry.IsEntriesAdded())
             {
 
                 AddButton = Utilities.Button("Add", style, 100, 40);
@@ -36,7 +37,12 @@ namespace AddressableManager.AddressableSetter.Editor
 
                 style.hover.textColor = Color.yellow;
                 UpdateButton = Utilities.Button("Update", style, 100, 40);
-                if (UpdateButton) Setter.Update();
+                if (UpdateButton)
+                {
+                    Utilities.RemoveNullOrEmptyEntries();
+
+                    Setter.Update();
+                }
 
                 style.hover.textColor = Color.red;
                 RemoveButton = Utilities.Button("Remove", style, 100, 40);
@@ -44,7 +50,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 {
                     var setterGroupName = Setter.GroupName;
                     Setter.Remove();
-                    AllAddressableSettersEditor.AllSettersList.RemoveAll(o => o == Setter || o.GroupName == Setter.GroupName);
+                    Utilities.SettersList.RemoveAll(o => o == Setter || o.GroupName == Setter.GroupName);
                     Setter.ManageGroup.RemoveGroup(setterGroupName);
                     var assetObject = Utilities.GetAsset<Setter>(Setter.name) ?? Utilities.GetAsset<Setter>(setterGroupName);
                     if (assetObject != null) AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(assetObject));
@@ -54,7 +60,5 @@ namespace AddressableManager.AddressableSetter.Editor
                 EditorGUILayout.EndVertical();
             }
         }
-
-
     }
 }

@@ -22,11 +22,10 @@ namespace AddressableManager.AddressableSetter.Editor
         public Scene loadOnScene;
         public AutoLoad autoLoad;
         public Unload unload;
-
         private Setter Setter { get; set; }
         public string ID { get; set; }
-        private List<AData> GlobalOnAwake => Utilities.GlobalOnAwakeList;
-        private List<AData> GlobalOnStart => Utilities.GlobalOnStartList;
+        private List<AData> GlobalOnAwakeList => Utilities.GlobalOnAwakeList;
+        private List<AData> GlobalOnStartList => Utilities.GlobalOnStartList;
         public AData(AddressableAssetEntry addressableAssetEntry, Setter setter)
         {
             Setter = setter;
@@ -47,77 +46,47 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void ManageAutoLoad(AutoLoad load)
         {
-            Setter = Setter != null ? Setter : Utilities.GetSetter(group.Name);
-
-
-
-            if (entry.MainAsset == null || entry.TargetAsset == null || entry.MainAsset.GetType() == typeof(Setter))
-            {
-                Setter.ManageEntry.Entries.Remove(entry);
-                Utilities.RemoveAdataFrom(this, Setter.onStartList);
-                Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
-                Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
-                Utilities.RemoveAdataFrom(this, GlobalOnStart);
-                Utilities.RemoveAdataFrom(this, GlobalOnAwake);
-
-                if (group.entries.Contains(entry)) group.RemoveAssetEntry(entry);
-
-                return;
-            }
+            if (Setter == null) Setter = Utilities.GetSetter(group.Name);
+            if (Setter == null) { RemoveAssetInternal(); return; }
+            if (!CheckEntryExist()) return;
 
             switch (load)
             {
                 case AutoLoad.OnStart:
-
                     ManageLabel.AddOnStart(entry);
                     ManageLabel.RemoveOnAwake(entry);
-
-                    Utilities.AddAdataTo(this, GlobalOnStart);
-                    Utilities.RemoveAdataFrom(this, GlobalOnAwake);
-
+                    Utilities.AddAdataTo(this, GlobalOnStartList);
+                    Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
                     if (Setter != null)
                     {
                         Utilities.AddAdataTo(this, Setter.onStartList);
                         Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
                         Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
                     }
-
-
                     break;
                 case AutoLoad.OnAwake:
-
                     ManageLabel.AddOnAwake(entry);
                     ManageLabel.RemoveOnStart(entry);
-
-                    Utilities.RemoveAdataFrom(this, GlobalOnStart);
-                    Utilities.AddAdataTo(this, GlobalOnAwake);
-
-
+                    Utilities.RemoveAdataFrom(this, GlobalOnStartList);
+                    Utilities.AddAdataTo(this, GlobalOnAwakeList);
                     if (Setter != null)
                     {
                         Utilities.AddAdataTo(this, Setter.onAwakeList);
                         Utilities.RemoveAdataFrom(this, Setter.onStartList);
                         Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
                     }
-
-
-
                     break;
                 case AutoLoad.None:
-
                     ManageLabel.RemoveOnAwake(entry);
                     ManageLabel.RemoveOnStart(entry);
-
-                    Utilities.RemoveAdataFrom(this, GlobalOnStart);
-                    Utilities.RemoveAdataFrom(this, GlobalOnAwake);
-
+                    Utilities.RemoveAdataFrom(this, GlobalOnStartList);
+                    Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
                     if (Setter != null)
                     {
                         Utilities.AddAdataTo(this, Setter.noAutoLoadList);
                         Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
                         Utilities.RemoveAdataFrom(this, Setter.onStartList);
                     }
-
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
@@ -125,6 +94,27 @@ namespace AddressableManager.AddressableSetter.Editor
             RefreshLabels();
             entry = Utilities.DefaultAssetSettings.CreateOrMoveEntry(ID, group);
 
+        }
+
+        public bool CheckEntryExist()
+        {
+            if (entry != null && !Utilities.IsNullEmptyWhiteSpace(entry.address) && entry.MainAsset != null && entry.TargetAsset != null) return true;
+            RemoveAssetInternal();
+            return false;
+        }
+
+        private void RemoveAssetInternal()
+        {
+            if (Setter !=null)
+            {
+                Setter.ManageEntry.Entries.Remove(entry);
+                Utilities.RemoveAdataFrom(this, Setter.onStartList);
+                Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
+                Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
+            }
+            Utilities.RemoveAdataFrom(this, GlobalOnStartList);
+            Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
+            if (group != null && group.entries.Contains(entry)) group.RemoveAssetEntry(entry);
         }
 
         public void RefreshLabels() => labels = ManageLabel.AddLabels(entry, Setter.labelReferences);

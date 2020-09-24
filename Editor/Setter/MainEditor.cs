@@ -13,7 +13,7 @@ namespace AddressableManager.AddressableSetter.Editor
         private GroupsEditor<Setter> GroupsEditor { get; set; }
         private LabelsEditor LabelsEditor { get; set; }
         private ListsEditor<Setter> ListsEditor { get; set; }
-        private AllAddressableSettersEditor AllAddressableSettersEditor { get; set; }
+        private GlobalSettersEditor<Setter> GlobalSettersEditor { get; set; }
         private ButtonsEditor ButtonsEditor { get; set; }
 
         private void OnEnable()
@@ -25,7 +25,7 @@ namespace AddressableManager.AddressableSetter.Editor
             GroupsEditor = new GroupsEditor<Setter>(this);
             LabelsEditor = new LabelsEditor(this);
             ListsEditor = new ListsEditor<Setter>(this);
-            AllAddressableSettersEditor = new AllAddressableSettersEditor(this);
+            GlobalSettersEditor = new GlobalSettersEditor<Setter>(this);
             ButtonsEditor = new ButtonsEditor(this);
         }
         public override void OnInspectorGUI()
@@ -38,7 +38,7 @@ namespace AddressableManager.AddressableSetter.Editor
             GroupsEditor.Init();
             LabelsEditor.Init();
             Lists(assetPath);
-            AllAddressableSettersEditor.Init();
+            GlobalSettersEditor.Init();
             ButtonsEditor.Init();
             serializedObject.Update();
         }
