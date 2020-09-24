@@ -29,11 +29,9 @@ plugins:
   - jekyll-feed
 
 
-baseurl: "" # the subpath of your site, e.g. /blog
-
-
+# baseurl: "/AddressablesManager" 
 github_username:  SujanDuttaMishra
-
+google_analytics: UA-178463680-2
 # Build settings
 
 
