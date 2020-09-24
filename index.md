@@ -1,4 +1,7 @@
-
+* Addressable Asset Setter From Folder a scriptable object will Assign labels addressable template and Auto Load Unload Mechanism and Load Unload on demand with ease via unity scriptable object container.
+* Auto reorganize and structure selected assets into unity based folder, for example texture,audio,video ,mesh found within any selected folder and or recursive folders within and moves it to global Asset Folder AssetData for ease optional but recomended.
+* Creates and updates a relevant  group in addressable groups as per folder assets contains and selected options.
+* Addressable Manager Class then Easily instantiate and track asset via async operation. uses unitask instead of system.threading to make it compatible with WebGl.
 >Addressable Manager & Setter => "Under Development && Test"
 
 - [Install Package](#install-package)
