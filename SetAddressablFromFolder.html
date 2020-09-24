@@ -19,17 +19,17 @@
     </script>
 
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Addressable Manager | Easy Unity Addressable Manager &amp; Setter</title>
+<title>Set Addressable From Folder | Addressable Manager</title>
 <meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Addressable Manager" />
+<meta property="og:title" content="Set Addressable From Folder" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Easy Unity Addressable Manager &amp; Setter" />
 <meta property="og:description" content="Easy Unity Addressable Manager &amp; Setter" />
-<link rel="canonical" href="http://localhost:4000/404.html" />
-<meta property="og:url" content="http://localhost:4000/404.html" />
+<link rel="canonical" href="http://localhost:4000/SetAddressablFromFolder.html" />
+<meta property="og:url" content="http://localhost:4000/SetAddressablFromFolder.html" />
 <meta property="og:site_name" content="Addressable Manager" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"http://localhost:4000/404.html","headline":"Addressable Manager","description":"Easy Unity Addressable Manager &amp; Setter","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"http://localhost:4000/SetAddressablFromFolder.html","headline":"Set Addressable From Folder","description":"Easy Unity Addressable Manager &amp; Setter","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -61,26 +61,54 @@
 
 
       <section id="main_content">
-        <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
+        <h1 id="set-addressable-from-folder">Set Addressable From Folder</h1>
+<p>right click in any folder in your project 
+<img src="/Images/SetFromFolder.png" alt="" /></p>
 
-<div class="container">
-  <h1>404</h1>
+<p>This will Create a scriptable object inside the folder , select it and check inspector!
+<img src="/Images/create.png" alt="" /></p>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div>
+<p>In inspector Set up folder settings
+<img src="/Images/settings.png" alt="" /></p>
+
+<p>In Label settings ,add on start /onawake / none to do initial Set up , add remove extra labels as need and add FolderLabel 
+<img src="/Images/label_settings.png" alt="" /></p>
+
+<p>Before Add</p>
+
+<hr />
+
+<p><img src="/Images/before_add.png" alt="" />
+after that click Add button
+After Add (depending on label setting this may vary)</p>
+
+<hr />
+
+<p><img src="/Images/after_add.png" alt="" /></p>
+
+<p>Reassign values ( per object in folder you can set values )</p>
+
+<hr />
+
+<p><img src="/Images/reassign_values.png" alt="" /></p>
+
+<p>After Values Reassigned
+<img src="/Images/afterreassign.png" alt="" /></p>
+
+<p>Check out Two Additional Scriptable object under Asset Data</p>
+
+<hr />
+<p>Now Your Scriptable object can be used in Manager To Auto load Manage for both on start / on Awake , Asset set as not auto load cab be loaded on demand by referencing to folder Scriptable found in every folder that became addressable.</p>
+
+<p><img src="/Images/globalonstartawake.png" alt="" /></p>
+
+<hr />
+
+<p><a href="/">Home</a></p>
+
+<p><a href="/SetUpUnityAddressable.html">Back</a></p>
+
+<p><a href="/AddressableManager.html">SetUp Manager</a></p>
 
       </section>
 
