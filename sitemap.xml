@@ -1,29 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!--
+ created with Free Online Sitemap Generator www.xml-sitemaps.com 
+-->
 <url>
-<loc>http://localhost:4000/jekyll/update/2020/09/23/welcome-to-jekyll.html</loc>
-<lastmod>2020-09-23T19:33:10-04:00</lastmod>
+<loc>
+https://sujanduttamishra.github.io/AddressablesManager/
+</loc>
+<lastmod>2020-09-24T17:41:53+00:00</lastmod>
+<priority>1.00</priority>
 </url>
 <url>
-<loc>http://localhost:4000/about/</loc>
+<loc>
+https://sujanduttamishra.github.io/AddressablesManager/SetUpUnityAddressable.html
+</loc>
+<lastmod>2020-09-24T17:41:53+00:00</lastmod>
+<priority>0.80</priority>
 </url>
 <url>
-<loc>http://localhost:4000/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/AddressableManager.html</loc>
-</url>
-<url>
-<loc>http://localhost:4000/SetAddressablFromFolder.html</loc>
-</url>
-<url>
-<loc>http://localhost:4000/SetUpUnityAddressable.html</loc>
-</url>
-<url>
-<loc>http://localhost:4000/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/googleb98066bce30d72e8.html</loc>
-<lastmod>2020-09-24T12:09:14-04:00</lastmod>
+<loc>
+https://sujanduttamishra.github.io/AddressablesManager/AddressableManager.html
+</loc>
+<lastmod>2020-09-24T17:41:53+00:00</lastmod>
+<priority>0.51</priority>
 </url>
 </urlset>
