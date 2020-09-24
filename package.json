@@ -7,6 +7,7 @@
   "description": "Unity Addressable Manager and Setter.\nSet Addressable Asset From Folder\nAssign Auto Load Mechanism",
   "dependencies": {
     "com.unity.addressables": "1.8.5"
+    
   },
   "keywords": [
     "Unity",
@@ -20,6 +21,6 @@
     "url": "https://github.com/SujanDuttaMishra/AddressablesManager.git",
     "revision": "679387cb1fa822190b530bdbb8ea0945f508b5f6"
   },
-  "type": "tool",
+
   "unityRelease": "10f1"
 }
