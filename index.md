@@ -37,7 +37,9 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
     alternatively copy 
     https://github.com/SujanDuttaMishra/AddressablesManager.git
     and paste it in unity package manager 
+
 ***
+
 ## How to Use
 
 [SetUp UnityAddressable](SetUpUnityAddressable.md)
