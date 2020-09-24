@@ -1,8 +1,7 @@
 ***
 >Addressable Manager & Setter => "Under Development && Test"
 ***
-- [Install Package](#install-package)
-  - [Install via Git URL](#install-via-git-url)
+- [Install via Git URL](#install-via-git-url)
 - [How to Use](#how-to-use)
 
 ***
@@ -39,10 +38,10 @@ Open *Packages/manifest.json* with your favorite text editor. Add the following 
     and paste it in unity package manager 
 
 ***
-
-## How to Use
+***
+### How to Use
 
 [SetUp UnityAddressable](SetUpUnityAddressable.md)
-
+***
 
 
