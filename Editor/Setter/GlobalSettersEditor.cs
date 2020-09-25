@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditorInternal;
@@ -22,6 +23,9 @@ namespace AddressableManager.AddressableSetter.Editor
 
         internal void Init()
         {
+
+            Utilities.SettersList = Utilities.SettersList.Where(o => o != null).ToList();
+
             m_count = AllSettersList.Count;
 
             Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
@@ -33,19 +37,19 @@ namespace AddressableManager.AddressableSetter.Editor
                     drawElementCallback = DrawEntry,
                     drawHeaderCallback = DrawHeader,
                     elementHeight = 30,
-
                 };
                 allSettersList.DoLayoutList();
 
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
             GUILayout.Space(5);
-           
+
         }
 
 
         private void DrawHeader(Rect rect)
         {
+
             var totalAssets = 0;
             AllSettersList.ForEach(o => totalAssets += o.AssetCount);
             GUI.Label(rect, $"Total Folder Setters : {m_count} | Total OnAwake asset {Utilities.GlobalOnAwakeList.Count} | Total OnStart asset {Utilities.GlobalOnStartList.Count} | Total Addressable Asset : {totalAssets}");
@@ -53,15 +57,16 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void DrawEntry(Rect rect, int index, bool isActive, bool isFocused)
         {
+
             var style = new GUIStyle { richText = true };
             Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
-            
+
             var text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
                        $"+ OnAwake : <color=yellow> [{ AllSettersList[index].onAwakeList.Count }] </color>" +
                        $"+ No AutoLoad: <color=yellow> [{AllSettersList[index].noAutoLoadList.Count}] </color> " +
                        $"= <color=green> {AllSettersList[index].AssetCount} </color> </color>";
 
-            GUI.Label(Position(rect, 110),text, style) ;
+            GUI.Label(Position(rect, 110), text, style);
 
         }
 

@@ -5,7 +5,7 @@
         public const string OnStart = "OnStart";
         public const string OnAwake = "OnAwake";
         public const  string NoAutoLoad = "NoAutoLoad";
-        public const string AssetData = "AssetData";
+        public const string AssetData = "AssetData/";
         public const string AssetDataPath = "Assets/" + AssetData;
         public const string AddressableAssetsDataPath = "Assets/AddressableAssetsData";
         public const string AddressableAssetSettingsName = "AddressableAssetSettings";
