@@ -24,18 +24,10 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             m_count = AllSettersList.Count;
 
-            if (m_count <= 1) return;
-
             Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
             if (Foldout)
             {
-
-                var isOnlySetter = Target != null && AllSettersList[0] == Target;
-
                 Utilities.PingButton("All Setters List", Utilities.GetAsset<SetterList>(nameof(SetterList)));
-
-                if (m_count <= 0 || m_count == 1 && isOnlySetter) return;
-
                 var allSettersList = new ReorderableList(AllSettersList, typeof(AddressableAssetEntry), false, true, false, false)
                 {
                     drawElementCallback = DrawEntry,
@@ -48,6 +40,7 @@ namespace AddressableManager.AddressableSetter.Editor
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
             GUILayout.Space(5);
+           
         }
 
 

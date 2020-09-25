@@ -1,5 +1,6 @@
 ﻿using AddressableManager.AddressableSetter.Editor;
 using UnityEditor;
+
 [CustomEditor(typeof(SetterList), true)]
 public class SetterListEditor : Editor
 {
@@ -19,5 +20,6 @@ public class SetterListEditor : Editor
 
         GlobalSettersEditor.Init();
         serializedObject.Update();
+
     }
 }

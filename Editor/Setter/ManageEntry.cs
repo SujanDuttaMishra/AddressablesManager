@@ -54,7 +54,7 @@ namespace AddressableManager.AddressableSetter.Editor
             if (!Setter.ReCalculatePathToImport(out pathList)) return EntriesAdded;
             EntriesAdded = pathList.Count == Setter.Group.entries.Count;
             Setter.Group.entries.ForEach(o=> Entries.AddIfNotContains(o));
-            Debug.Log($"Found In Folder {pathList.Count} Entries Added {Entries.Count}");
+           // Debug.Log($"Found In Folder {pathList.Count} Entries Added {Entries.Count}");
             return EntriesAdded ;
         }
 
