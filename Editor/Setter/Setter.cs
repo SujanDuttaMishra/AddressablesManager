@@ -143,20 +143,30 @@ namespace AddressableManager.AddressableSetter.Editor
 
         }
 
+       
+        public string FolderPath => moveToAssetData ? Constants.AssetDataPath.Replace('/', '\\') + GroupName : FolderDirectory.Replace('/', '\\');
+        private string FolderName(string typeBase) => Constants.AssetDataPath + GroupName + "/" + typeBase;
+       
+        public bool deleteEmptyDirectory;
+
         internal void Organize()
         {
-            string folderPath;
+
+
             if (moveToAssetData)
             {
-                folderPath = Constants.AssetDataPath.Replace('/', '\\') + GroupName;
-                if (!IsFolderInAssetData) AssetDatabase.MoveAsset(FolderDirectory, folderPath);
-            }
-            else folderPath = FolderDirectory.Replace('/', '\\');
 
+                if (!IsFolderInAssetData) AssetDatabase.MoveAsset(FolderDirectory, FolderPath);
+            }
+
+
+            AssetDatabase.Refresh();
+
+             
             if (createUnityTypeFolders && IsFolderInAssetData)
             {
-                int countType = 0;
-                var data = Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories).ToList();
+                var data = Directory.EnumerateFiles(FolderPath, "*", SearchOption.AllDirectories).ToList();
+                
                 for (var i = 0; i < data.Count; i++)
                 {
                     var asset = AssetDatabase.LoadAssetAtPath(data[i], typeof(Object));
@@ -165,59 +175,78 @@ namespace AddressableManager.AddressableSetter.Editor
 
                     if (type != null && type != typeof(Setter))
                     {
-                        countType++;
+                        
                         var typeBase = type.ToString().Remove(0, 12);
                         var obj = asset as GameObject;
                         var haveParticle = obj != null && obj.GetComponentsInChildren<ParticleSystem>()?.Length > 0;
 
-                        if (type == typeof(GameObject)) CreateDirectoryAndMove(haveParticle ? FolderName("/ParticleSystem") : FolderName("/Prefabs"), typeBase, asset);
-                        else CreateDirectoryAndMove(FolderName(typeBase), typeBase, asset);
+                        if (type == typeof(GameObject)) CreateDirectoryAndMove(haveParticle ? FolderName("/ParticleSystem") : FolderName("/Prefabs"), type, haveParticle, asset);
+                        else CreateDirectoryAndMove(FolderName(typeBase), type, haveParticle, asset);
+                       
                     }
                 }
 
-                UnityTypeFolderCreated = CheckIfFoldersExistForEachType();
+                var length = Directory.GetDirectories(FolderPath).Length;
+               
+                
             }
 
-        }
-        private string FolderName(string typeBase)
-        {
-            return Constants.AssetDataPath + GroupName + "/" + typeBase;
+
         }
 
-        private static void CreateDirectoryAndMove(string path, string typeBase, Object asset)
-        {
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            MoveAsset(asset, typeBase, Path.GetFileName(path), path);
-        }
 
-        private static void MoveAsset(Object asset, string typeBase, string directoryName,string path)
+
+        private  void CreateDirectoryAndMove(string path, Type type, bool haveParticle, Object asset)
         {
-            if (typeBase != directoryName) return;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            AssetDatabase.Refresh();
+            var directoryName = type != typeof(GameObject) ? Path.GetFileName(path) : haveParticle ? "ParticleSystem" : "Prefabs";
+
+            MoveAsset(asset, directoryName, path);
             
-           // path = path.Replace('/', '\\');
+        }
 
-           // Debug.Log($"moved {path} {Directory.Exists(path)}");
-
-           //  Debug.Log($"ready to move asset {asset.name}  to  path {path}");
-
-           
-
-
-            var newPath = string.Concat(path, asset.name, ".asset");
-            var oldPath = AssetDatabase.GetAssetPath(asset);
-            var moved = string.IsNullOrEmpty(AssetDatabase.ValidateMoveAsset(oldPath, newPath)) ? 
-                AssetDatabase.MoveAsset(oldPath, newPath) :
-                $"Failed to move asset from path '{oldPath}' to '{newPath}'.";
-
-            
+        private  void MoveAsset(Object asset, string directoryName, string path)
+        {
+            var assetPath = AssetDatabase.GetAssetPath(asset);
+            var checkedDirectory = Path.GetFileName(Path.GetDirectoryName(assetPath));
+            if (checkedDirectory == directoryName) return;
+            path += "/" + Path.GetFileName(AssetDatabase.GetAssetPath(asset));
+            var moved = AssetDatabase.MoveAsset(assetPath, path);
             Debug.Log($"moved {moved}");
+            AssetDatabase.Refresh();
+            
         }
 
-        public bool UnityTypeFolderCreated { get; set; }
 
-        private bool CheckIfFoldersExistForEachType()
+
+
+
+        public bool ProcessDirectory(string folderPath,out string emptyFolder )
         {
-            return true;
+            emptyFolder=string.Empty;
+            foreach (var directory in Directory.GetDirectories(folderPath))
+            {
+               
+                if(Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
+                {
+                    emptyFolder = directory;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
+        public void DeleteEmptyDirectory()
+        {
+            ProcessDirectory(FolderPath, out var emptyFolder);
+            Directory.Delete(emptyFolder, false);
+            AssetDatabase.Refresh();
         }
     }
 }

@@ -42,11 +42,18 @@ namespace AddressableManager.AddressableSetter.Editor
             EditorGUILayout.BeginVertical("Box");
             var header = new List<string> { "Auto Organize" };
             Headers(header, header.Count);
-            header = IsFolderInAssetData? new List<string> { "Create UnityType Folders" } : new List<string> { "Move To AssetData", "Create UnityType Folders"};
+            var processDirectory = Setter.ProcessDirectory(Setter.FolderPath, out _);
+            header = IsFolderInAssetData ? processDirectory ? new List<string> { "Create UnityType Folders", "Delete Empty Folders" } : new List<string> { "Create UnityType Folders" } : new List<string> { "Move To AssetData", "Create UnityType Folders" };
             Headers(header, header.Count);
             EditorGUILayout.BeginHorizontal("box");
-            if(!IsFolderInAssetData) Utilities.PropertyField(MainEditor, nameof(Setter.moveToAssetData), header, Setter.Organize);
+            if (!IsFolderInAssetData) Utilities.PropertyField(MainEditor, nameof(Setter.moveToAssetData), header, Setter.Organize);
             Utilities.PropertyField(MainEditor, nameof(Setter.createUnityTypeFolders), header, Setter.Organize);
+
+
+            if (processDirectory)
+            {
+                Utilities.PropertyField(MainEditor, nameof(Setter.deleteEmptyDirectory), header, Setter.DeleteEmptyDirectory);
+            }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
         }
