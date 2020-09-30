@@ -50,7 +50,7 @@ public static class StringEx
         {$"{Variant.lower}",$"{Variant.lower}"},
 
     };
-    private static readonly Dictionary<string, string> sizeList = Enumerable.Range(0, 999).ToList().ConvertAll(o => o.ToString()).ToDictionary(x => x, x => x);
+    private static readonly Dictionary<string, string> sizeList = Enumerable.Range(0, 99).ToList().ConvertAll(o => o.ToString()).ToDictionary(x => x, x => x);
     private static readonly Dictionary<string, string> colors = new Dictionary<string, string>()
     {
         { C.red ,C.red},
