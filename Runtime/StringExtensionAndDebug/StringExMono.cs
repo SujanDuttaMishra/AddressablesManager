@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text.RegularExpressions;
+using UnityEngine;
 using static StringEx;
 
 
@@ -48,6 +49,9 @@ public class StringExMono : MonoBehaviour
         // Log/LogError/LogWarning/LogAssert doesn't do trace (if all you want is to get clean debug) ; LogT/LogErrorT/LogWarningT/LogAssertT does trace that you can logTrace to script
 
         // this is a string Extension thus we can use it for GUI / tesxmeshpro or text also
+
+
+       
     }
 
 
