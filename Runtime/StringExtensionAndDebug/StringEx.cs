@@ -10,116 +10,51 @@ public static class StringEx
 {
     // this is a string Extension thus we can use it for GUI / textMeshPro or Text also
     public static bool DoLog { get; set; } = true;
-    private const string Pattern = @"([^;:]*)\:?([^;:]*)\:?([^;:]*)\:?([^;:]*)\:?([^;:]*)\;";
+    private const string Match = @"([^;:]*)\";
+    private static readonly string pattern = $"{Match}:?{Match}:?{Match}:?{Match}:?{Match};";
     private static readonly Dictionary<string, string> styles = new Dictionary<string, string>()
         {
-            {"b","b"},
-            {"B","b"},
-            {"BOLD","b"},
-            {$"{FontStyle.Bold}","b"},
+            {"b","b"}, {"B","b"}, {"BOLD","b"}, {$"{FontStyle.Bold}","b"},
 
-            {"i","i"} ,
-            {"I","i"} ,
-            {"ITALIC","i"},
-            {$"{FontStyle.Italic}","i"},
+            {"i","i"} , {"I","i"} , {"ITALIC","i"}, {$"{FontStyle.Italic}","i"},
 
-            {"bi",$"{FontStyle.BoldAndItalic}"},
-            {"ib",$"{FontStyle.BoldAndItalic}"},
-            {"Bi",$"{FontStyle.BoldAndItalic}"},
-            {"Ib",$"{FontStyle.BoldAndItalic}"},
-            {"BI",$"{FontStyle.BoldAndItalic}"},
-            {"IB",$"{FontStyle.BoldAndItalic}"},
-            {$"{FontStyle.BoldAndItalic}",$"{FontStyle.BoldAndItalic}"},
-            {"BoldItalic",$"{FontStyle.BoldAndItalic}"},
-
+            {"bi",$"{FontStyle.BoldAndItalic}"}, {"ib",$"{FontStyle.BoldAndItalic}"}, {"Bi",$"{FontStyle.BoldAndItalic}"},
+            {"Ib",$"{FontStyle.BoldAndItalic}"}, {"BI",$"{FontStyle.BoldAndItalic}"}, {"IB",$"{FontStyle.BoldAndItalic}"},
+            {$"{FontStyle.BoldAndItalic}",$"{FontStyle.BoldAndItalic}"}, {"BoldItalic",$"{FontStyle.BoldAndItalic}"},
         };
+
     private static readonly Dictionary<string, string> variant = new Dictionary<string, string>()
     {
-        {"U",$"{Variant.UPPER}"},
-        {"UP",$"{Variant.UPPER}"},
-        {$"{Variant.UPPER}",$"{Variant.UPPER}"},
+        {"U",$"{Variant.UPPER}"}, {"UP",$"{Variant.UPPER}"}, {$"{Variant.UPPER}",$"{Variant.UPPER}"},
 
-        {"T",$"{Variant.TitleCase}"},
-        {"t",$"{Variant.TitleCase}"},
-        {$"{Variant.TitleCase}",$"{Variant.TitleCase}"},
+        {"T",$"{Variant.TitleCase}"}, {"t",$"{Variant.TitleCase}"}, {$"{Variant.TitleCase}",$"{Variant.TitleCase}"},
 
-        {"L",$"{Variant.lower}"},
-        {"l",$"{Variant.lower}"},
-        {"LO",$"{Variant.lower}"},
-        {"Lo",$"{Variant.lower}"},
-        {$"{Variant.lower}",$"{Variant.lower}"},
-
+        {"L",$"{Variant.lower}"}, {"l",$"{Variant.lower}"}, {"LO",$"{Variant.lower}"}, {"Lo",$"{Variant.lower}"}, {$"{Variant.lower}",$"{Variant.lower}"},
     };
+
     private static readonly Dictionary<string, string> sizeList = Enumerable.Range(0, 99).ToList().ConvertAll(o => o.ToString()).ToDictionary(x => x, x => x);
+
     private static readonly Dictionary<string, string> colors = new Dictionary<string, string>()
     {
-        { C.red ,C.red},
-        { "RED" ,C.red},
-        { "Red" ,C.red},
-        { "r" ,C.red},
-        { "R" ,C.red},
-        {$"{Color.red}",C.red},
+        { C.red ,C.red}, { "RED" ,C.red}, { "Red" ,C.red}, { "r" ,C.red}, { "R" ,C.red}, {$"{Color.red}",C.red},
 
-        {C.yellow,C.yellow},
-        {"YEllOW",C.yellow},
-        {"Yellow",C.yellow},
-        {"y",C.yellow},
-        {"Y",C.yellow},
-        {$"{Color.yellow}",C.yellow},
+        {C.yellow,C.yellow}, {"YEllOW",C.yellow}, {"Yellow",C.yellow}, {"y",C.yellow}, {"Y",C.yellow}, {$"{Color.yellow}",C.yellow},
 
-        {C.green,C.green},
-        {"GREEN",C.green},
-        {"Green",C.green},
-        {"g",C.green},
-        {"G",C.green},
-        {$"{Color.green}",C.green},
+        {C.green,C.green}, {"GREEN",C.green}, {"Green",C.green}, {"g",C.green}, {"G",C.green}, {$"{Color.green}",C.green},
 
-        {$"{C.magenta}",C.magenta},
-        {"MAGENTA",C.magenta},
-        {"Magenta",C.magenta},
-        {"m",C.magenta},
-        {"M",C.magenta},
-        {$"{Color.magenta}",C.magenta},
+        {$"{C.magenta}",C.magenta}, {"MAGENTA",C.magenta}, {"Magenta",C.magenta}, {"m",C.magenta}, {"M",C.magenta}, {$"{Color.magenta}",C.magenta},
 
-        {$"{C.white}",C.white},
-        {"White",C.white},
-        {"WHITE",C.white},
-        {"w",C.white},
-        {"W",C.white},
-        {$"{Color.white}",C.white},
+        {$"{C.white}",C.white}, {"White",C.white}, {"WHITE",C.white}, {"w",C.white}, {"W",C.white}, {$"{Color.white}",C.white},
 
-        {$"{C.black}",C.black},
-        {"Black",C.black},
-        {"BLACK",C.black},
-        {"bla",C.black},
-        {"Bla",C.black},
-        {$"{Color.black}",C.black},
+        {$"{C.black}",C.black}, {"Black",C.black}, {"BLACK",C.black}, {"bla",C.black}, {"Bla",C.black}, {$"{Color.black}",C.black},
 
-        {$"{C.blue}",C.blue},
-        {"Blue",C.blue},
-        {"bl",C.blue},
-        {"Bl",C.blue},
-        {"BL",C.blue},
-        {$"{Color.blue}",C.blue},
+        {$"{C.blue}",C.blue}, {"Blue",C.blue}, {"bl",C.blue}, {"Bl",C.blue}, {"BL",C.blue}, {$"{Color.blue}",C.blue},
 
-        {$"{C.gray}",C.gray},
-        {"Gray",C.gray},
-        {"GRAY",C.gray},
-        {"gr",C.gray},
-        {"GR",C.gray},
-        {$"{Color.gray}",C.gray},
+        {$"{C.gray}",C.gray}, {"Gray",C.gray}, {"GRAY",C.gray}, {"gr",C.gray}, {"GR",C.gray}, {$"{Color.gray}",C.gray},
 
-        {$"{C.grey}",C.gray},
-        {"Grey",C.grey},
-        {"GREY",C.grey},
+        {$"{C.grey}",C.gray}, {"Grey",C.grey}, {"GREY",C.grey},
 
-
-        {$"{C.cyan}",C.cyan},
-        {"Cyan",C.cyan},
-        {"CYAN",C.cyan},
-        {"c",C.cyan},
-        {"C",C.cyan},
-        {$"{Color.cyan}",C.cyan},
+        {$"{C.cyan}",C.cyan}, {"Cyan",C.cyan}, {"CYAN",C.cyan}, {"c",C.cyan}, {"C",C.cyan}, {$"{Color.cyan}",C.cyan},
 
         {$"{C.aqua}",C.aqua},
         {$"{C.brown}",C.brown},
@@ -152,7 +87,8 @@ public static class StringEx
         styles[str] == $"{FontStyle.BoldAndItalic}" ? $"<b><i>" + text + $"</i></b>" : $"<{styles[str]}>" + text + $"</{styles[str]}>";
     private static string VariantConvert(string str, string text) =>
         variant[str] == $"{Variant.UPPER}" ? text.ToUpper() : variant[str] == $"{Variant.TitleCase}" ? text.ToTitleCase() : text.ToLower();
-    public static string Interpolate(this string value) => string.Join("", new Regex(Pattern, RegexOptions.Multiline).Matches(value).OfType<Match>().ToList()
+    public static string ToTitleCase(this string @string) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@string.ToLower());
+    public static string Interpolate(this string value) => string.Join("", new Regex(pattern, RegexOptions.Multiline).Matches(value).OfType<Match>().ToList()
             .ConvertAll(o => GetValue(GetValue(GetValue(GetValue(o.Groups[1].Value, o.Groups, variant), o.Groups, styles), o.Groups, sizeList), o.Groups, colors)));
     public static string Apply(string value) => $":{value};";
     public static string Apply(Color color) => $":{color};";
@@ -189,7 +125,7 @@ public static class StringEx
     public static void LogWarningT(string @string) => Action(() => Debug.LogWarningFormat(@string.Interpolate()));
     public static void LogErrorT(string @string) => Action(() => Debug.LogErrorFormat(@string.Interpolate()));
     public static void LogAssertT(string @string) => Action(() => Debug.LogAssertionFormat(@string.Interpolate()));
-    public static string ToTitleCase(this string @string) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@string.ToLower());
+   
 }
 
 public enum Variant
