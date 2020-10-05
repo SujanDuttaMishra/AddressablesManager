@@ -6,33 +6,35 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
 public static class StringEx
 {
     // this is a string Extension thus we can use it for GUI / textMeshPro or Text also
     public static bool DoLog { get; set; } = true;
     private const string Match = @"([^;:]*)\";
     private static readonly string pattern = $"{Match}:?{Match}:?{Match}:?{Match}:?{Match};";
-    private const int MaxSize = 50, MinSize = 5;
-
-    private static readonly Dictionary<string, string> styles = new Dictionary<string, string>
-    {
+    private static readonly Dictionary<string, string> styles = new Dictionary<string, string>()
+        {
             {"b","b"}, {"B","b"}, {"BOLD","b"}, {$"{FontStyle.Bold}","b"},
 
             {"i","i"} , {"I","i"} , {"ITALIC","i"}, {$"{FontStyle.Italic}","i"},
 
-            {"bi",$"BI"}, {"ib",$"BI"}, {"Bi",$"BI"}, {"Ib",$"BI"}, {"BI",$"BI"}, {"IB",$"BI"}, {$"{FontStyle.BoldAndItalic}",$"BI"}, {"BoldItalic",$"BI"},
+            {"bi",$"{FontStyle.BoldAndItalic}"}, {"ib",$"{FontStyle.BoldAndItalic}"}, {"Bi",$"{FontStyle.BoldAndItalic}"},
+            {"Ib",$"{FontStyle.BoldAndItalic}"}, {"BI",$"{FontStyle.BoldAndItalic}"}, {"IB",$"{FontStyle.BoldAndItalic}"},
+            {$"{FontStyle.BoldAndItalic}",$"{FontStyle.BoldAndItalic}"}, {"BoldItalic",$"{FontStyle.BoldAndItalic}"},
         };
-    private static readonly Dictionary<string, string> variant = new Dictionary<string, string>
+
+    private static readonly Dictionary<string, string> variant = new Dictionary<string, string>()
     {
-        {"U","U"}, {"UP","U"}, {$"Upper","U"},{$"{Variant.UPPER}","U"},
+        {"U",$"{Variant.UPPER}"}, {"UP",$"{Variant.UPPER}"}, {$"{Variant.UPPER}",$"{Variant.UPPER}"},
 
-        {"T","T"}, {"t","T"}, {$"TITLE","T"}, {$"{Variant.TitleCase}","T"},
+        {"T",$"{Variant.TitleCase}"}, {"t",$"{Variant.TitleCase}"}, {$"{Variant.TitleCase}",$"{Variant.TitleCase}"},
 
-        {"L","L"}, {"l","L"}, {"LO","L"}, {"Lo","L"}, {$"{Variant.lower}","L"},
+        {"L",$"{Variant.lower}"}, {"l",$"{Variant.lower}"}, {"LO",$"{Variant.lower}"}, {"Lo",$"{Variant.lower}"}, {$"{Variant.lower}",$"{Variant.lower}"},
     };
+
     private static readonly Dictionary<string, string> sizeList = Enumerable.Range(0, 99).ToList().ConvertAll(o => o.ToString()).ToDictionary(x => x, x => x);
-    private static readonly Dictionary<string, string> colors = new Dictionary<string, string>
+
+    private static readonly Dictionary<string, string> colors = new Dictionary<string, string>()
     {
         { C.red ,C.red}, { "RED" ,C.red}, { "Red" ,C.red}, { "r" ,C.red}, { "R" ,C.red}, {$"{Color.red}",C.red},
 
@@ -70,18 +72,24 @@ public static class StringEx
         {$"{C.gold}",C.gold},
 
 };
-    private static string GetValue(string text, IEnumerable groups, IReadOnlyDictionary<string, string> list) => string.IsNullOrEmpty(Find(groups, out var key, list)) ? text : Convert(key, text);
+    private const int MaxSize = 50, MinSize = 5;
+    private static string GetValue(string text, GroupCollection groups, Dictionary<string, string> list) => GetValue(text, groups, list, out var value) ? value : text;
+    public static bool GetValue(string text, GroupCollection groups, Dictionary<string, string> list, out string value) =>
+        (value = string.IsNullOrEmpty(Find(groups, out var key, list)) ? text : Convert(key, text)) != string.Empty;
     private static string Find(IEnumerable groups, out string value, IReadOnlyDictionary<string, string> list) => value = groups.Cast<Group>().ToList().Find(o => list.ContainsKey(o.Value))?.Value;
-    private static string Convert(string key, string input) =>
-        int.TryParse(key, out var value) ? $"<size={Mathf.Clamp(value, MinSize, MaxSize)}>{input}</size>" :
-        colors.ContainsKey(key) ? $"<color={colors[key]}> {input} </color>" :
-        styles.ContainsKey(key) ? StyleConvert(key, input) :
-        variant.ContainsKey(key) ? VariantConvert(key, input) : $"<{key}>" + input + $"</{key}>";
-    private static string StyleConvert(string key, string input) => styles[key] == $"BI" ? "<b><i>" + input + "</i></b>" : $"<{styles[key]}>" + input + $"</{styles[key]}>";
-    private static string VariantConvert(string key, string input) => variant[key] == "U" ? input.ToUpper() : variant[key] == "T" ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower()) : input.ToLower();
-    public static string Interpolate(this string input) => string.Concat( Regex.Matches(input, pattern, RegexOptions.Multiline).OfType<Match>().ToList()
+    private static string Convert(string str, string text) =>
+        int.TryParse(str, out var value) ? $"<size={Mathf.Clamp(value, MinSize, MaxSize)}>{text}</size>" :
+        colors.ContainsKey(str) ? $"<color={colors[str]}> {text} </color>" :
+        styles.ContainsKey(str) ? StyleConvert(str, text) :
+        variant.ContainsKey(str) ? VariantConvert(str, text) :
+        $"<{str}>" + text + $"</{str}>";
+    private static string StyleConvert(string str, string text) =>
+        styles[str] == $"{FontStyle.BoldAndItalic}" ? $"<b><i>" + text + $"</i></b>" : $"<{styles[str]}>" + text + $"</{styles[str]}>";
+    private static string VariantConvert(string str, string text) =>
+        variant[str] == $"{Variant.UPPER}" ? text.ToUpper() : variant[str] == $"{Variant.TitleCase}" ? text.ToTitleCase() : text.ToLower();
+    public static string ToTitleCase(this string @string) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@string.ToLower());
+    public static string Interpolate(this string value) => string.Join("", new Regex(pattern, RegexOptions.Multiline).Matches(value).OfType<Match>().ToList()
             .ConvertAll(o => GetValue(GetValue(GetValue(GetValue(o.Groups[1].Value, o.Groups, variant), o.Groups, styles), o.Groups, sizeList), o.Groups, colors)));
-  
     public static string Apply(string value) => $":{value};";
     public static string Apply(Color color) => $":{color};";
     public static string Apply(FontStyle fontStyle) => $":{fontStyle};";
@@ -101,9 +109,7 @@ public static class StringEx
     public static string Apply(FontStyle fontStyle, int i) => $":{fontStyle}:{i};";
     public static string Apply(Variant caseVariant, int i) => $":{caseVariant}:{i};";
     public static string Apply(FontStyle fontStyle, Variant caseVariant) => $":{fontStyle}:{caseVariant};";
-    
     public static void Action(Action action) { if (DoLog) action(); }
-
     public static void Log() => Action(() => Debug.LogFormat(LogType.Log, LogOption.NoStacktrace, null, new string('_', 150)));
     public static void Log(int i) => Action(() => Debug.LogFormat(LogType.Log, LogOption.NoStacktrace, null, new string('_', i)));
     public static void Log(char c) => Action(() => Debug.LogFormat(LogType.Log, LogOption.NoStacktrace, null, new string(c, 150)));

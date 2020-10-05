@@ -51,7 +51,7 @@ namespace AddressableManager.AddressableSetter.Editor
         {
 
             var totalAssets = 0;
-            AllSettersList?.ForEach(o => totalAssets += o.AssetCount);
+            AllSettersList.ForEach(o => totalAssets += o.AssetCount);
             GUI.Label(rect, $"Total Folder Setters : {m_count} | Total OnAwake asset {Utilities.GlobalOnAwakeList.Count} | Total OnStart asset {Utilities.GlobalOnStartList.Count} | Total Addressable Asset : {totalAssets}");
         }
 
