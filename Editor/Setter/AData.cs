@@ -22,7 +22,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public Scene loadOnScene;
         public AutoLoad autoLoad;
         public Unload unload;
-        private Setter Setter { get; set; }
+        public Setter Setter { get; set; }
         public string ID { get; set; }
         private List<AData> GlobalOnAwakeList => Utilities.GlobalOnAwakeList;
         private List<AData> GlobalOnStartList => Utilities.GlobalOnStartList;
@@ -103,18 +103,26 @@ namespace AddressableManager.AddressableSetter.Editor
             return false;
         }
 
-        private void RemoveAssetInternal()
+        public void RemoveAssetInternal()
         {
-            if (Setter !=null)
+            if (Setter != null)
             {
                 Setter.ManageEntry.Entries.Remove(entry);
                 Utilities.RemoveAdataFrom(this, Setter.onStartList);
                 Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
                 Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
+               
             }
+
+            RemoveOnSetterNull();
+        }
+
+        public void RemoveOnSetterNull()
+        {
+            if (Setter != null) return;
             Utilities.RemoveAdataFrom(this, GlobalOnStartList);
             Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
-            if (group != null && group.entries.Contains(entry)) group.RemoveAssetEntry(entry);
+            if (@group != null && @group.entries.Contains(entry)) @group.RemoveAssetEntry(entry);
         }
 
         public void RefreshLabels() => labels = ManageLabel.AddLabels(entry, Setter.labelReferences);

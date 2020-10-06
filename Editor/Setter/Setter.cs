@@ -94,7 +94,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 outPathList.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
                 ManageEntry?.CreateAData();
             }
-            if (!Utilities.SettersList.Contains(this)) Utilities.SettersList.Add(this);
+           
 
 
             AssetDatabase.SaveAssets();
@@ -128,7 +128,6 @@ namespace AddressableManager.AddressableSetter.Editor
             ManageEntry.RemoveEntry();
             ManageGroup.RemoveGroup(GroupName);
             autoLoad = AutoLoad.None;
-            if (Utilities.SettersList.Contains(this)) Utilities.SettersList.Remove(this);
             AssetDatabase.SaveAssets();
 
         }

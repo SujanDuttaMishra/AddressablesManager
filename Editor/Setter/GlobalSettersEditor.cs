@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditorInternal;
@@ -9,11 +8,11 @@ namespace AddressableManager.AddressableSetter.Editor
 {
     internal class GlobalSettersEditor<T> where T : ScriptableObject
     {
-        private int m_count;
+        private int Count => AllSettersList.Count;
         public UnityEditor.Editor MainEditor { get; set; }
         private T Target => (T)MainEditor.target;
         private bool Foldout { get; set; } = true;
-        public List<Setter> AllSettersList { get; } = Utilities.SettersList;
+        public List<Setter> AllSettersList { get => AllSetters.settersList; set => AllSetters.settersList = value; }
 
         public GlobalSettersEditor(UnityEditor.Editor editor)
         {
@@ -23,15 +22,12 @@ namespace AddressableManager.AddressableSetter.Editor
 
         internal void Init()
         {
-
-            Utilities.SettersList = Utilities.SettersList.Where(o => o != null).ToList();
-
-            m_count = AllSettersList.Count;
+            
 
             Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
             if (Foldout)
             {
-                Utilities.PingButton("All Setters List", Utilities.GetAsset<SetterList>(nameof(SetterList)));
+                Utilities.PingButton("All Setters List", Utilities.GetAsset<AllSetters>(nameof(AllSetters)));
                 var allSettersList = new ReorderableList(AllSettersList, typeof(AddressableAssetEntry), false, true, false, false)
                 {
                     drawElementCallback = DrawEntry,
@@ -52,16 +48,26 @@ namespace AddressableManager.AddressableSetter.Editor
 
             var totalAssets = 0;
             AllSettersList.ForEach(o => totalAssets += o.AssetCount);
-            GUI.Label(rect, $"Total Folder Setters : {m_count} | Total OnAwake asset {Utilities.GlobalOnAwakeList.Count} | Total OnStart asset {Utilities.GlobalOnStartList.Count} | Total Addressable Asset : {totalAssets}");
+            GUI.Label(rect, $"Total Folder Setters : {Count} | Total OnAwake asset {Utilities.GlobalOnAwakeList.Count} | Total OnStart asset {Utilities.GlobalOnStartList.Count} | Total Assets : {totalAssets}");
         }
 
         private void DrawEntry(Rect rect, int index, bool isActive, bool isFocused)
         {
 
             var style = new GUIStyle { richText = true };
+            var text = string.Empty;
+
+            if (AllSettersList[index].AssetCount <= 0 )
+            {
+                text = $" Asset :R:15; Not Added Yet! :Y;".Interpolate() ;
+                Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
+                GUI.Label(Position(rect, 110), text, style);
+                return;
+            }
+
             Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
 
-            var text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
+             text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
                        $"+ OnAwake : <color=yellow> [{ AllSettersList[index].onAwakeList.Count }] </color>" +
                        $"+ No AutoLoad: <color=yellow> [{AllSettersList[index].noAutoLoadList.Count}] </color> " +
                        $"= <color=green> {AllSettersList[index].AssetCount} </color> </color>";

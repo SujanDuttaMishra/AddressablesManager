@@ -112,8 +112,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public static List<AData> GlobalOnAwakeList { get => GlobalOnAwake.aDataList; set => GlobalOnAwake.aDataList = value; }
         public static GlobalList GlobalOnStart => LoadAssetFromPackagePath<GlobalList>(Constants.AddressablesManagerSettings, Constants.GlobalOnStartList, out var globalList) ? globalList : GlobalList.GetOrCreateInstance(Constants.GlobalOnStartList);
         public static List<AData> GlobalOnStartList { get => GlobalOnStart.aDataList; set => GlobalOnStart.aDataList = value; }
-        public static SetterList Setters => LoadAssetFromPackagePath<SetterList>(Constants.AddressablesManagerSettings, nameof(SetterList), out var setterList) ? setterList : GetOrCreateInstances<SetterList>(nameof(SetterList));
-        public static List<Setter> SettersList { get => Setters.settersList; set => Setters.settersList = value; }
+        public static List<Setter> SettersList { get => AllSetters.settersList; set => AllSetters.settersList = value; }
 
         public static bool LoadAssetFromPackagePath<T>(string packagesPath, string assetName, out T outAsset) where T : ScriptableObject => (outAsset = (T)AssetDatabase.LoadAssetAtPath($"{packagesPath}{assetName}.asset", typeof(T))) != null;
         internal static Setter GetSetter(string groupName) => GetAsset<Setter>(groupName);
@@ -154,7 +153,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public static void RemoveNullOrEmptyEntries()
         {
-            SettersList = SettersList.Where(o => o != null && o.IsGroup).ToList();
+           
             GlobalOnAwakeList = GlobalOnAwakeList.Where(o => !o.CheckEntryExist()).ToList();
             GlobalOnStartList = GlobalOnStartList.Where(o => !o.CheckEntryExist()).ToList();
         }

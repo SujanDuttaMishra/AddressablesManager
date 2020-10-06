@@ -27,11 +27,12 @@ namespace AddressableManager.AddressableSetter.Editor
             ListsEditor = new ListsEditor<Setter>(this);
             GlobalSettersEditor = new GlobalSettersEditor<Setter>(this);
             ButtonsEditor = new ButtonsEditor(this);
+               
         }
         public override void OnInspectorGUI()
         {
             if (Setter == null) return;
-
+            if(!AllSetters.settersList.Contains(Setter)) AllSetters.settersList.Add(Setter);
             serializedObject.Update();
             if (!HeaderEditor.Init(out var assetPath)) return;
             OptionEditor.Init();

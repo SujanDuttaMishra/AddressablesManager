@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -17,8 +16,16 @@ namespace AddressableManager.AddressableSetter.Editor
             return globalList;
         }
         public static string OnCreatePath { get; set; }
-       
-       
+
+        private void OnEnable()
+        {
+            RemoveWithoutSetter();
+        }
+
+        public void RemoveWithoutSetter()
+        {
+            aDataList.ForEach(o => o.RemoveOnSetterNull());
+        }
     }
 }
 

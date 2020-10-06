@@ -50,10 +50,11 @@ namespace AddressableManager.AddressableSetter.Editor
                 {
                     var setterGroupName = Setter.GroupName;
                     Setter.Remove();
-                    Utilities.SettersList.RemoveAll(o => o == Setter || o.GroupName == Setter.GroupName);
+                    if (AllSetters.settersList.Contains(Setter)) AllSetters.settersList.Remove(Setter);
                     Setter.ManageGroup.RemoveGroup(setterGroupName);
                     var assetObject = Utilities.GetAsset<Setter>(Setter.name) ?? Utilities.GetAsset<Setter>(setterGroupName);
                     if (assetObject != null) AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(assetObject));
+                    AssetDatabase.Refresh();
                 }
 
                 EditorGUILayout.EndHorizontal();

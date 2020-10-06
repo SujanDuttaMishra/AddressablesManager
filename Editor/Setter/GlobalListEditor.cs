@@ -21,6 +21,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public override void OnInspectorGUI()
         {
             if (GlobalList == null) return;
+            GlobalList.RemoveWithoutSetter();
             HeaderEditor.Init(out _);
             Lists();
             Button();
