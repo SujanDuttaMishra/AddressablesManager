@@ -118,9 +118,10 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public void Update()
         {
+          
             if (!IsGroup) return;
             ManageEntry.UpdateEntry();
-
+           
         }
         public void Remove()
         {
