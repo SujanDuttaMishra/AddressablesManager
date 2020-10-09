@@ -21,8 +21,8 @@ namespace AddressableManager.AddressableSetter.Editor
         public override void OnInspectorGUI()
         {
             if (GlobalList == null) return;
+
             GlobalList.RemoveWithoutSetter();
-            HeaderEditor.Init(out _);
             Lists();
             Button();
         }
@@ -75,10 +75,6 @@ namespace AddressableManager.AddressableSetter.Editor
                 aData.Update(aData.autoLoad);
 
                 if (aData.entry.MainAsset == null) GlobalList.aDataList.Remove(aData);
-
-
-
-                // Debug.Log($" name {GlobalList.name} Count {GlobalList.aDataList.Count} aData Group {aData.group}");
             }
         }
 

@@ -13,14 +13,17 @@ namespace AddressableManager
             if (action == null) { Debug.LogException(new NullReferenceException()); return; }
             foreach (var element in source) { action(element); }
         }
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+        public static void ForEachReversed<T>(this ICollection<T> source, Action<T> action)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (action == null) throw new ArgumentNullException(nameof(action));
-
-            var index = 0;
-            foreach (var element in source) action(element, index++);
+            foreach (var element in source.Reverse())
+            {
+                action(element);
+            }
         }
+
+
         public static void ForEachWithNullCheck<T>(this IEnumerable<T> list, Action<T> action) => list?.ForEach(action);
         public static void ForEachWithRecursiveNullCheck<T>(this IEnumerable<T> source, Action<T> action)
         {

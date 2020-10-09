@@ -13,7 +13,7 @@ namespace AddressableManager.AddressableSetter.Editor
         private GroupsEditor<Setter> GroupsEditor { get; set; }
         private LabelsEditor LabelsEditor { get; set; }
         private ListsEditor<Setter> ListsEditor { get; set; }
-        private GlobalSettersEditor<Setter> GlobalSettersEditor { get; set; }
+        private ListDisplayEditor<Setter> ListDisplayEditor { get; set; }
         private ButtonsEditor ButtonsEditor { get; set; }
 
         private void OnEnable()
@@ -25,7 +25,7 @@ namespace AddressableManager.AddressableSetter.Editor
             GroupsEditor = new GroupsEditor<Setter>(this);
             LabelsEditor = new LabelsEditor(this);
             ListsEditor = new ListsEditor<Setter>(this);
-            GlobalSettersEditor = new GlobalSettersEditor<Setter>(this);
+            ListDisplayEditor = new ListDisplayEditor<Setter>(this);
             ButtonsEditor = new ButtonsEditor(this);
                
         }
@@ -39,7 +39,7 @@ namespace AddressableManager.AddressableSetter.Editor
             GroupsEditor.Init();
             LabelsEditor.Init();
             Lists(assetPath);
-            GlobalSettersEditor.Init();
+            ListDisplayEditor.Init();
             ButtonsEditor.Init();
             serializedObject.Update();
         }

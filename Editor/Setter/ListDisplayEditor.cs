@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditorInternal;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
-    internal class GlobalSettersEditor<T> where T : ScriptableObject
+    internal class ListDisplayEditor<T> where T : ScriptableObject
     {
         private int Count => AllSettersList.Count;
         public UnityEditor.Editor MainEditor { get; set; }
@@ -14,7 +15,7 @@ namespace AddressableManager.AddressableSetter.Editor
         private bool Foldout { get; set; } = true;
         public List<Setter> AllSettersList { get => AllSetters.settersList; set => AllSetters.settersList = value; }
 
-        public GlobalSettersEditor(UnityEditor.Editor editor)
+        public ListDisplayEditor(UnityEditor.Editor editor)
         {
             MainEditor = editor;
 
@@ -22,19 +23,21 @@ namespace AddressableManager.AddressableSetter.Editor
 
         internal void Init()
         {
-            
+           
 
             Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
             if (Foldout)
             {
-                Utilities.PingButton("All Setters List", Utilities.GetAsset<AllSetters>(nameof(AllSetters)));
-                var allSettersList = new ReorderableList(AllSettersList, typeof(AddressableAssetEntry), false, true, false, false)
+                
+                Utilities.PingButton("All Setters List", AllSetters.Instance);
+
+                var list = new ReorderableList(AllSettersList, typeof(AddressableAssetEntry), false, true, false, false)
                 {
                     drawElementCallback = DrawEntry,
                     drawHeaderCallback = DrawHeader,
                     elementHeight = 30,
                 };
-                allSettersList.DoLayoutList();
+                list.DoLayoutList();
 
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
@@ -57,22 +60,29 @@ namespace AddressableManager.AddressableSetter.Editor
             var style = new GUIStyle { richText = true };
             var text = string.Empty;
 
-            if (AllSettersList[index].AssetCount <= 0 )
+            if (AllSettersList[index].AssetCount <= 0)
             {
-                text = $" Asset :R:15; Not Added Yet! :Y;".Interpolate() ;
-                Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
+                text = $" Asset :R:15; Not Added Yet! :Y;".Interpolate();
+                Button(rect, index);
                 GUI.Label(Position(rect, 110), text, style);
                 return;
             }
 
-            Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
+            Button(rect, index);
 
-             text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
+            text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
                        $"+ OnAwake : <color=yellow> [{ AllSettersList[index].onAwakeList.Count }] </color>" +
                        $"+ No AutoLoad: <color=yellow> [{AllSettersList[index].noAutoLoadList.Count}] </color> " +
                        $"= <color=green> {AllSettersList[index].AssetCount} </color> </color>";
 
             GUI.Label(Position(rect, 110), text, style);
+
+        }
+
+        private void Button(Rect rect, int index)
+        {
+            Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
+
 
         }
 

@@ -6,23 +6,24 @@ using UnityEngine;
 [CustomEditor(typeof(AllSetters), true)]
 public class AllSettersEditor : Editor
 {
-    private GlobalSettersEditor<AllSetters> GlobalSettersEditor { get; set; }
+    private ListDisplayEditor<AllSetters> ListDisplayEditor { get; set; }
     internal AllSetters Setter { get; private set; }
 
     private void OnEnable()
     {
         if (target == null) return;
         Setter = (AllSetters)target;
-        GlobalSettersEditor = new GlobalSettersEditor<AllSetters>(this);
+        ListDisplayEditor = new ListDisplayEditor<AllSetters>(this);
     }
 
     public override void OnInspectorGUI()
     {
+       
         AllSetters.RemoveNullOrUnpopulated();
         serializedObject.ApplyModifiedProperties();
-        GlobalSettersEditor.Init();
+        ListDisplayEditor.Init();
         serializedObject.Update();
-       
+
 
     }
 }
