@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine.AddressableAssets;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -25,45 +26,22 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         public void AddLabel(string label)
         {
-            if (!Utilities.IsLabelIn(label, LabelReferences)) LabelReferences.Add(new AssetLabelReference { labelString = label });
-            if (!Utilities.LabelsToStringList(AssetSettings).Contains(label)) AssetSettings.AddLabel(label);
-            if (!Utilities.LabelsToStringList(Utilities.DefaultAssetSettings).Contains(label)) Utilities.DefaultAssetSettings.AddLabel(label);
+            if (!IsLabelIn(label, LabelReferences)) LabelReferences.Add(new AssetLabelReference { labelString = label });
+            if (!LabelsToStringList(AssetSettings).Contains(label)) AssetSettings.AddLabel(label);
+            if (!LabelsToStringList(DefaultAssetSettings).Contains(label)) DefaultAssetSettings.AddLabel(label);
         }
         public void RemoveLabel(string label)
         {
             if (LabelReferences.Count > 0) LabelReferences = LabelReferences.Where(o => o.labelString != label).ToList();
             if (CustomLabelList.Count > 0) CustomLabelList = CustomLabelList.Where(o => o != label).ToList();
-            Utilities.RemoveLabelFrom(label, AssetSettings);
-            Utilities.RemoveLabelFrom(label, Utilities.DefaultAssetSettings);
+            RemoveLabelFrom(label, AssetSettings);
+            RemoveLabelFrom(label, DefaultAssetSettings);
         }
-        public static void AddLabelToEntry(AddressableAssetEntry entry, string label) { if (!entry.labels.Contains(label)) entry.labels.Add(label); }
-        private static void RemoveLabelFromEntry(AddressableAssetEntry entry, string label) { if (entry.labels.Contains(label)) entry.labels.Remove(label); }
-        public static void RemoveOnStart(AddressableAssetEntry entry) => RemoveLabelFromEntry(entry, Constants.OnStart);
-        public static void RemoveOnAwake(AddressableAssetEntry entry) => RemoveLabelFromEntry(entry, Constants.OnAwake);
-        public static void AddOnStart(AddressableAssetEntry entry) => AddLabelToEntry(entry, Constants.OnStart);
-        public static void AddOnAwake(AddressableAssetEntry entry) => AddLabelToEntry(entry, Constants.OnAwake);
+
         public void RemoveLabels()
         {
-            RemoveAndClearLabelFrom(LabelReferences, AssetSettings, Utilities.DefaultAssetSettings);
-            RemoveAndClearLabelFrom(CustomLabelList, AssetSettings, Utilities.DefaultAssetSettings);
-        }
-        public static void RemoveAndClearLabelFrom(List<AssetLabelReference> list, AddressableAssetSettings settings, AddressableAssetSettings defaultSettings)
-        {
-            if (list.Count <= 0) return;
-            list.ForEach(label => { Utilities.RemoveLabelFrom(label.labelString, settings); Utilities.RemoveLabelFrom(label.labelString, defaultSettings); });
-            list.Clear();
-        }
-        public static void RemoveAndClearLabelFrom(List<string> list, AddressableAssetSettings settings, AddressableAssetSettings defaultSettings)
-        {
-            if (list.Count <= 0) return;
-            list.ForEach(label => { Utilities.RemoveLabelFrom(label, settings); Utilities.RemoveLabelFrom(label, defaultSettings); });
-            list.Clear();
-        }
-        public static List<string> AddLabels(AddressableAssetEntry entry, List<AssetLabelReference> labelReferences)
-        {
-            if (labelReferences.Count <= 0) return entry.labels.ToList();
-            labelReferences.ForEach(o => { if (o.labelString != Constants.OnAwake && o.labelString != Constants.OnStart) AddLabelToEntry(entry, o.labelString); });
-            return entry.labels.ToList();
+            RemoveAndClearLabelFrom(LabelReferences, AssetSettings, DefaultAssetSettings);
+            RemoveAndClearLabelFrom(CustomLabelList, AssetSettings, DefaultAssetSettings);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -11,7 +11,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public List<AssetReference> AssetReferenceList => aDataList?.ConvertAll(o => o.assetReference);
         public static GlobalList GetOrCreateInstance(string fileName)
         {
-            var globalList = Utilities.GetOrCreateInstance<GlobalList>( Constants.AssetDataPath, Constants.Asset, Constants.AssetData, fileName, out var path);
+            var globalList = GetOrCreateInstance<GlobalList>( Constants.AssetDataPath, Constants.Asset, Constants.AssetData, fileName, out var path);
             OnCreatePath = path;
             globalList.name = fileName;
             return globalList;

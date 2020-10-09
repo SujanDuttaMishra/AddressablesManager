@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditorInternal;
 using UnityEngine;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
+using static UnityEditor.EditorGUILayout;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -25,11 +25,11 @@ namespace AddressableManager.AddressableSetter.Editor
         {
            
 
-            Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
+            Foldout = BeginFoldoutHeaderGroup(Foldout, $" Global Setter");
             if (Foldout)
             {
                 
-                Utilities.PingButton("All Setters List", AllSetters.Instance);
+                PingButton("All Setters List", AllSetters.Instance);
 
                 var list = new ReorderableList(AllSettersList, typeof(AddressableAssetEntry), false, true, false, false)
                 {
@@ -40,8 +40,8 @@ namespace AddressableManager.AddressableSetter.Editor
                 list.DoLayoutList();
 
             }
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            GUILayout.Space(5);
+            EndFoldoutHeaderGroup();
+            Space(5);
 
         }
 
@@ -51,7 +51,10 @@ namespace AddressableManager.AddressableSetter.Editor
 
             var totalAssets = 0;
             AllSettersList.ForEach(o => totalAssets += o.AssetCount);
-            GUI.Label(rect, $"Total Folder Setters : {Count} | Total OnAwake asset {Utilities.GlobalOnAwakeList.Count} | Total OnStart asset {Utilities.GlobalOnStartList.Count} | Total Assets : {totalAssets}");
+            GUI.Label(rect, $"Total Folder Setters : {Count} |" +
+                            $" Total OnAwake asset {GlobalOnAwakeList.Count} |" +
+                            $" Total OnStart asset {GlobalOnStartList.Count} |" +
+                            $" Total Assets : {totalAssets}");
         }
 
         private void DrawEntry(Rect rect, int index, bool isActive, bool isFocused)
@@ -72,7 +75,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
             text = $" <color=grey> OnStart : <color=yellow> [{AllSettersList[index].onStartList.Count}] </color>" +
                        $"+ OnAwake : <color=yellow> [{ AllSettersList[index].onAwakeList.Count }] </color>" +
-                       $"+ No AutoLoad: <color=yellow> [{AllSettersList[index].noAutoLoadList.Count}] </color> " +
+                       $"+ No AutoLoadStr: <color=yellow> [{AllSettersList[index].noAutoLoadList.Count}] </color> " +
                        $"= <color=green> {AllSettersList[index].AssetCount} </color> </color>";
 
             GUI.Label(Position(rect, 110), text, style);
@@ -81,7 +84,7 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void Button(Rect rect, int index)
         {
-            Utilities.PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
+            PingButton(rect, AllSettersList[index].GroupName, AllSettersList[index], 100, 29);
 
 
         }

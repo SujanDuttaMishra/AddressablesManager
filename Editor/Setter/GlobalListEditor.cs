@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
+using static UnityEditor.EditorGUILayout;
+
 
 namespace AddressableManager.AddressableSetter.Editor
 {
     [CustomEditor(typeof(GlobalList), true)]
     internal class GlobalListEditor : UnityEditor.Editor
     {
+        public bool UpdateButton { get; set; }
+        public bool ClearButton { get; private set; }
         private GlobalList GlobalList { get; set; }
-        private HeaderEditor<GlobalList> HeaderEditor { get; set; }
         private ListsEditor<GlobalList> ListsEditor { get; set; }
         private void OnEnable()
         {
             if (target == null) return;
             GlobalList = (GlobalList)target;
-            HeaderEditor = new HeaderEditor<GlobalList>(this);
             ListsEditor = new ListsEditor<GlobalList>(this, true);
         }
         public override void OnInspectorGUI()
@@ -38,7 +41,7 @@ namespace AddressableManager.AddressableSetter.Editor
             });
 
             if (!EditorGUI.EndChangeCheck() || !autoUpdate) return;
-            UpdateAdatas();
+            UpdateADatas();
         }
 
         internal void Button()
@@ -49,27 +52,27 @@ namespace AddressableManager.AddressableSetter.Editor
                 fontSize = 14,
                 alignment = TextAnchor.MiddleCenter
             };
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
+            BeginVertical("Box");
+            BeginHorizontal();
 
             style.hover.textColor = Color.yellow;
-            UpdateButton = Utilities.Button("Update", style, 100, 40);
+            UpdateButton = UButton("Update", style, 100, 40);
             if (UpdateButton)
             {
-                UpdateAdatas();
+                UpdateADatas();
             }
 
             style.hover.textColor = Color.red;
-            ClearButton = Utilities.Button("Clear All", style, 100, 40);
+            ClearButton = UButton("Clear All", style, 100, 40);
             if (ClearButton) GlobalList.aDataList.Clear();
 
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
+            EndHorizontal();
+            EndVertical();
         }
 
-        private void UpdateAdatas()
+        private void UpdateADatas()
         {
-            for (int i = 0; i < GlobalList.aDataList.Count; i++)
+            for (var i = 0; i < GlobalList.aDataList.Count; i++)
             {
                 var aData = GlobalList.aDataList[i];
                 aData.Update(aData.autoLoad);
@@ -78,7 +81,6 @@ namespace AddressableManager.AddressableSetter.Editor
             }
         }
 
-        public bool UpdateButton { get; set; }
-        public bool ClearButton { get; private set; }
+
     }
 }

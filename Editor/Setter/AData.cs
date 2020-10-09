@@ -4,6 +4,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -23,8 +24,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public Unload unload;
         public Setter Setter { get; set; }
         public string ID { get; set; }
-        private List<AData> GlobalOnAwakeList => Utilities.GlobalOnAwakeList;
-        private List<AData> GlobalOnStartList => Utilities.GlobalOnStartList;
+
         public AData(AddressableAssetEntry addressableAssetEntry, Setter setter)
         {
             Setter = setter;
@@ -45,59 +45,53 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void ManageAutoLoad(AutoLoad load)
         {
-            if (Setter == null) Setter = Utilities.GetSetter(group.Name);
-            if (Setter == null) { RemoveAssetInternal(); return; }
-            if (!CheckEntryExist()) return;
+            if (Setter == null) Setter = GetSetter(group.Name);
+            if (Setter == null) { RemoveOnSetterNull(); return; }
+            if (!CheckEntry()) return;
 
             switch (load)
             {
                 case AutoLoad.OnStart:
-                    ManageLabel.AddOnStart(entry);
-                    ManageLabel.RemoveOnAwake(entry);
-                    Utilities.AddAdataTo(this, GlobalOnStartList);
-                    Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
-                    if (Setter != null)
-                    {
-                        Utilities.AddAdataTo(this, Setter.onStartList);
-                        Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
-                        Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
-                    }
+                    AddOnStartLabel(entry);
+                    RemoveOnAwakeLabel(entry);
+                    AddAdataTo(this, GlobalOnStartList);
+                    RemoveAdataFrom(this, GlobalOnAwakeList);
+                    SetterLists(Setter.onStartList, Setter.onAwakeList, Setter.noAutoLoadList);
                     break;
                 case AutoLoad.OnAwake:
-                    ManageLabel.AddOnAwake(entry);
-                    ManageLabel.RemoveOnStart(entry);
-                    Utilities.RemoveAdataFrom(this, GlobalOnStartList);
-                    Utilities.AddAdataTo(this, GlobalOnAwakeList);
-                    if (Setter != null)
-                    {
-                        Utilities.AddAdataTo(this, Setter.onAwakeList);
-                        Utilities.RemoveAdataFrom(this, Setter.onStartList);
-                        Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
-                    }
+                    AddOnAwakeLabel(entry);
+                    RemoveOnStartLabel(entry);
+                    RemoveAdataFrom(this, GlobalOnStartList);
+                    AddAdataTo(this, GlobalOnAwakeList);
+                    SetterLists(Setter.onAwakeList, Setter.onStartList, Setter.noAutoLoadList);
                     break;
                 case AutoLoad.None:
-                    ManageLabel.RemoveOnAwake(entry);
-                    ManageLabel.RemoveOnStart(entry);
-                    Utilities.RemoveAdataFrom(this, GlobalOnStartList);
-                    Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
-                    if (Setter != null)
-                    {
-                        Utilities.AddAdataTo(this, Setter.noAutoLoadList);
-                        Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
-                        Utilities.RemoveAdataFrom(this, Setter.onStartList);
-                    }
+                    RemoveOnAwakeLabel(entry);
+                    RemoveOnStartLabel(entry);
+                    RemoveAdataFrom(this, GlobalOnStartList);
+                    RemoveAdataFrom(this, GlobalOnAwakeList);
+                    SetterLists(Setter.noAutoLoadList, Setter.onAwakeList, Setter.onStartList);
+
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
 
             RefreshLabels();
-            entry = Utilities.DefaultAssetSettings.CreateOrMoveEntry(ID, group);
+            entry = DefaultAssetSettings.CreateOrMoveEntry(ID, group);
 
         }
 
-        public bool CheckEntryExist()
+        private void SetterLists(List<AData> addList, List<AData> removeListA, List<AData> removeListB)
         {
-            if (entry != null && !Utilities.IsNullEmptyWhiteSpace(entry.address) && entry.MainAsset != null && entry.TargetAsset != null) return true;
+            if (Setter == null) return;
+            AddAdataTo(this, addList);
+            RemoveAdataFrom(this, removeListA);
+            RemoveAdataFrom(this, removeListB);
+        }
+
+        public bool CheckEntry()
+        {
+            if (entry != null && !IsNullEmptyWhiteSpace(entry.address) && entry.MainAsset != null && entry.TargetAsset != null) return true;
             RemoveAssetInternal();
             return false;
         }
@@ -107,9 +101,9 @@ namespace AddressableManager.AddressableSetter.Editor
             if (Setter != null)
             {
                 Setter.ManageEntry.Entries.Remove(entry);
-                Utilities.RemoveAdataFrom(this, Setter.onStartList);
-                Utilities.RemoveAdataFrom(this, Setter.onAwakeList);
-                Utilities.RemoveAdataFrom(this, Setter.noAutoLoadList);
+                RemoveAdataFrom(this, Setter.onStartList);
+                RemoveAdataFrom(this, Setter.onAwakeList);
+                RemoveAdataFrom(this, Setter.noAutoLoadList);
                
             }
 
@@ -119,12 +113,12 @@ namespace AddressableManager.AddressableSetter.Editor
         public void RemoveOnSetterNull()
         {
             if (Setter != null) return;
-            Utilities.RemoveAdataFrom(this, GlobalOnStartList);
-            Utilities.RemoveAdataFrom(this, GlobalOnAwakeList);
-            if (@group != null && @group.entries.Contains(entry)) @group.RemoveAssetEntry(entry);
+            RemoveAdataFrom(this, GlobalOnStartList);
+            RemoveAdataFrom(this, GlobalOnAwakeList);
+            if (group != null && group.entries.Contains(entry)) group.RemoveAssetEntry(entry);
         }
 
-        public void RefreshLabels() => labels = ManageLabel.AddLabels(entry, Setter.labelReferences);
+        public void RefreshLabels() => labels = AddLabels(entry, Setter.labelReferences);
     }
 
 

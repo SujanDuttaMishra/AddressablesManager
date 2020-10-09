@@ -8,6 +8,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -42,15 +43,10 @@ namespace AddressableManager.AddressableSetter.Editor
         public bool IsFolderInAssetData => FolderDirectory != null && FolderDirectory.StartsWith(Constants.AssetDataPath.Replace('/', '\\'));
 
         public AddressableAssetSettings assetSettings;
-
-
-        public AddressableAssetGroup Group => ManageGroup.TryGetGroup();
-        public bool IsGroup => ManageGroup.IsGroup();
-        public string GroupName => Utilities.IsNullEmptyWhiteSpace(newGroupName) ? name : newGroupName;
+        public AddressableAssetGroup Group => ManageGroup.TryGetGroup(GroupName);
+        public bool IsGroup => ManageGroup.IsGroup(GroupName);
+        public string GroupName => IsNullEmptyWhiteSpace(newGroupName) ? name : newGroupName;
         public int AssetCount => (noAutoLoadList?.Count ?? 0) + (onAwakeList?.Count ?? 0) + (onStartList?.Count ?? 0);
-
-
-
         public Setter()
         {
             ManageTemplate = new ManageTemplate(this);
@@ -66,17 +62,27 @@ namespace AddressableManager.AddressableSetter.Editor
         [MenuItem("Assets/Addressable > SetEntry > FromFolder")]
         public static void CreateNew()
         {
-            if (!AddressableAssetSettingsDefaultObject.SettingsExists)
+            if (AddressableAssetSettingsDefaultObject.SettingsExists)
             {
-                EditorUtility.DisplayDialog("Folder Setter", "Oops ! You Forget To \" Create \" Addressable Settings. " +
+                AssetSettings = GetOrCreateInstances<AddressableAssetSettings>(Constants.AddressableAssetSettingsName);
+                var selection = AssetDatabase.GetAssetPath(Selection.activeObject);
+                var fileName = Path.GetFileNameWithoutExtension(selection);
+
+                if (!GetAsset<Setter>(fileName))
+                {
+
+                    CreateNew<Setter>(fileName, selection);
+                }
+            }
+            else
+            {
+                _ = EditorUtility.DisplayDialog("Folder Setter", "Oops ! You Forget To \" Create \" Addressable Settings. " +
                                                 "\n \nGo To \"Addressable Groups\" And Click \" Create \"" +
                                                 "\nWe Then Can Create \"Addressable Group Settings\" ", "OK");
-                return;
+               
             }
-            AssetSettings = Utilities.GetOrCreateInstances<AddressableAssetSettings>(Constants.AddressableAssetSettingsName, true);
-            var selection = AssetDatabase.GetAssetPath(Selection.activeObject);
-            var fileName = Path.GetFileNameWithoutExtension(selection);
-            if (!Utilities.GetAsset<Setter>(fileName)) Utilities.CreateNew<Setter>(fileName, selection);
+
+
         }
 
 
@@ -94,8 +100,6 @@ namespace AddressableManager.AddressableSetter.Editor
                 outPathList.ForEach(o => ManageEntry.CreateOrMoveEntry(o));
                 ManageEntry?.CreateAData();
             }
-           
-
 
             AssetDatabase.SaveAssets();
         }
@@ -110,18 +114,16 @@ namespace AddressableManager.AddressableSetter.Editor
                 $"{Constants.GlobalOnStartList}.asset",
                 $"{Constants.GlobalOnAwakeList}.asset"
             };
-            Utilities.GetAssets<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
+            GetAssets<Setter>().ForEachWithCondition(o => exclude.Add(o.name + ".asset"), o => !exclude.Contains(o.name + ".asset"));
 
-            return Utilities.GetAssetPathsFromLocation<Setter>(GroupName, exclude, include);
+            return GetAssetPathsFromLocation<Setter>(GroupName, exclude, include);
         }
 
 
         public void Update()
         {
-          
-            if (!IsGroup) return;
-            ManageEntry.UpdateEntry();
-           
+            if (IsGroup) ManageEntry.UpdateEntry();
+
         }
         public void Remove()
         {
@@ -152,16 +154,7 @@ namespace AddressableManager.AddressableSetter.Editor
         internal void Organize()
         {
 
-
-            if (moveToAssetData)
-            {
-
-                if (!IsFolderInAssetData) AssetDatabase.MoveAsset(FolderDirectory, FolderPath);
-            }
-
-
-            AssetDatabase.Refresh();
-
+            if (moveToAssetData && !IsFolderInAssetData) AssetDatabase.MoveAsset(FolderDirectory, FolderPath);
              
             if (createUnityTypeFolders && IsFolderInAssetData)
             {
@@ -191,22 +184,17 @@ namespace AddressableManager.AddressableSetter.Editor
                 
             }
 
-
+            AssetDatabase.Refresh();
         }
 
 
 
         private  void CreateDirectoryAndMove(string path, Type type, bool haveParticle, Object asset)
         {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             AssetDatabase.Refresh();
             var directoryName = type != typeof(GameObject) ? Path.GetFileName(path) : haveParticle ? "ParticleSystem" : "Prefabs";
-
             MoveAsset(asset, directoryName, path);
-            
         }
 
         private  void MoveAsset(Object asset, string directoryName, string path)
@@ -215,32 +203,20 @@ namespace AddressableManager.AddressableSetter.Editor
             var checkedDirectory = Path.GetFileName(Path.GetDirectoryName(assetPath));
             if (checkedDirectory == directoryName) return;
             path += "/" + Path.GetFileName(AssetDatabase.GetAssetPath(asset));
-            var moved = AssetDatabase.MoveAsset(assetPath, path);
-            Debug.Log($"moved {moved}");
+            AssetDatabase.MoveAsset(assetPath, path);
             AssetDatabase.Refresh();
-            
         }
-
-
-
-
-
         public bool ProcessDirectory(string folderPath,out string emptyFolder )
         {
             emptyFolder=string.Empty;
             foreach (var directory in Directory.GetDirectories(folderPath))
             {
-               
-                if(Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
-                {
-                    emptyFolder = directory;
-                    return true;
-                }
+                if (Directory.GetFiles(directory).Length != 0 || Directory.GetDirectories(directory).Length != 0) continue;
+                emptyFolder = directory;
+                return true;
             }
             return false;
         }
-
-
 
         public void DeleteEmptyDirectory()
         {

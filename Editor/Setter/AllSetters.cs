@@ -12,7 +12,9 @@ namespace AddressableManager.AddressableSetter.Editor
 
         private void OnEnable()
         {
-            if (Instance == null) Instance = LoadAssetFromPackagePath<AllSetters>(Constants.AddressablesManagerSettings, nameof(AllSetters), out var setterList) ? setterList : GetOrCreateInstances<AllSetters>(nameof(AllSetters));
+            if (Instance == null) 
+                Instance = LoadAssetFromPackagePath<AllSetters>(Constants.AddressablesManagerSettings, nameof(AllSetters), out var setterList) ? 
+                    setterList : GetOrCreateInstances<AllSetters>(nameof(AllSetters));
             Instance.name = nameof(AllSetters);
             RemoveNullOrUnpopulated();
         }
@@ -24,5 +26,7 @@ namespace AddressableManager.AddressableSetter.Editor
                 if (o == null || o.AssetCount <= 0) settersList.Remove(o);
             });
         }
+
+       
     }
 }

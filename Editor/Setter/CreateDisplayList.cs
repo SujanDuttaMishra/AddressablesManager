@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
+using static AddressableManager.Constants;
+using static UnityEditor.EditorGUILayout;
+using static UnityEditor.EditorGUIUtility;
+
+
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -26,73 +32,73 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             UnloadOptions = Enum.GetNames(typeof(Unload));
             AutoLoadOptions = Enum.GetNames(typeof(AutoLoad));
-            SceneNamesArray = Utilities.SceneNames();
+            SceneNamesArray = SceneNames();
         }
 
         internal void Create(IReadOnlyList<AData> list, SerializedProperty serializedProperty, AutoLoad autoLoadLabel, UnityEditor.Editor mainEditor)
         {
             if (list.Count <= 0) return;
             mainEditor.serializedObject.Update();
-            EditorGUILayout.BeginVertical("Box");
+            BeginVertical("Box");
 
             var column = Headers(list, autoLoadLabel).Length;
-            EditorGUILayout.BeginHorizontal("Box");
-            ApplyToAllButton = Utilities.Button("Apply To All", column);
+            BeginHorizontal("Box");
+            ApplyToAllButton = UButton("Apply To All", column);
             switch (autoLoadLabel)
             {
                 case AutoLoad.None:
 
-                    AutoLoadPopUpNone = EditorGUILayout.Popup(AutoLoadPopUpNone, AutoLoadOptions, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    AutoLoadPopUpNone = Popup(AutoLoadPopUpNone, AutoLoadOptions, GUILayout.MaxWidth(currentViewWidth / column));
                     AutoLoadIndexValue = (AutoLoad)Enum.Parse(typeof(AutoLoad), AutoLoadOptions[AutoLoadPopUpNone]);
                     LoadWithSceneIndex = 0;
                     UnloadIndexValue = Unload.None;
                     break;
 
                 case AutoLoad.OnStart:
-                    AutoLoadPopUpOnStart = EditorGUILayout.Popup(AutoLoadPopUpOnStart, AutoLoadOptions, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    AutoLoadPopUpOnStart = Popup(AutoLoadPopUpOnStart, AutoLoadOptions, GUILayout.MaxWidth(currentViewWidth / column));
                     AutoLoadIndexValue = (AutoLoad)Enum.Parse(typeof(AutoLoad), AutoLoadOptions[AutoLoadPopUpOnStart]);
 
-                    OnStartLoadWithSceneIndex = EditorGUILayout.Popup(OnStartLoadWithSceneIndex, SceneNamesArray, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    OnStartLoadWithSceneIndex = Popup(OnStartLoadWithSceneIndex, SceneNamesArray, GUILayout.MaxWidth(currentViewWidth / column));
                     LoadWithSceneIndex = OnStartLoadWithSceneIndex;
 
-                    UnloadOnStartIndex = EditorGUILayout.Popup(UnloadOnStartIndex, UnloadOptions, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    UnloadOnStartIndex = Popup(UnloadOnStartIndex, UnloadOptions, GUILayout.MaxWidth(currentViewWidth / column));
                     UnloadIndexValue = (Unload)Enum.Parse(typeof(Unload), UnloadOptions[UnloadOnStartIndex]);
 
                     break;
                 case AutoLoad.OnAwake:
 
-                    AutoLoadPopUpOnAwake = EditorGUILayout.Popup(AutoLoadPopUpOnAwake, AutoLoadOptions, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    AutoLoadPopUpOnAwake = Popup(AutoLoadPopUpOnAwake, AutoLoadOptions, GUILayout.MaxWidth(currentViewWidth / column));
                     AutoLoadIndexValue = (AutoLoad)Enum.Parse(typeof(AutoLoad), AutoLoadOptions[AutoLoadPopUpOnAwake]);
 
-                    OnAwakeLoadWithSceneIndex = EditorGUILayout.Popup(OnAwakeLoadWithSceneIndex, SceneNamesArray, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    OnAwakeLoadWithSceneIndex = Popup(OnAwakeLoadWithSceneIndex, SceneNamesArray, GUILayout.MaxWidth(currentViewWidth / column));
                     LoadWithSceneIndex = OnAwakeLoadWithSceneIndex;
 
-                    UnloadOnAwakeIndex = EditorGUILayout.Popup(UnloadOnAwakeIndex, UnloadOptions, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    UnloadOnAwakeIndex = Popup(UnloadOnAwakeIndex, UnloadOptions, GUILayout.MaxWidth(currentViewWidth / column));
                     UnloadIndexValue = (Unload)Enum.Parse(typeof(Unload), UnloadOptions[UnloadOnAwakeIndex]);
 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(autoLoadLabel), autoLoadLabel, null);
             }
-            EditorGUILayout.EndHorizontal();
+            EndHorizontal();
 
             if (list.Count > 0)
             {
                 for (var i = 0; i < list.Count; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    BeginHorizontal();
                     var item = serializedProperty.GetArrayElementAtIndex(i);
-                    var obj = item.FindPropertyRelative(Constants.Obj);
-                    var unload = item.FindPropertyRelative(Constants.Unload);
-                    var autoLoad = item.FindPropertyRelative(Constants.AutoLoad);
+                    var obj = item.FindPropertyRelative(Obj);
+                    var unload = item.FindPropertyRelative(UnloadStr);
+                    var autoLoad = item.FindPropertyRelative(AutoLoadStr);
 
-                    EditorGUILayout.PropertyField(obj, GUIContent.none, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
-                    EditorGUILayout.PropertyField(autoLoad, GUIContent.none, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                    PropertyField(obj, GUIContent.none, GUILayout.MaxWidth(currentViewWidth / column));
+                    PropertyField(autoLoad, GUIContent.none, GUILayout.MaxWidth(currentViewWidth / column));
 
                     if (autoLoadLabel != AutoLoad.None)
                     {
-                        list[i].loadOnSceneIndex = EditorGUILayout.Popup(list[i].loadOnSceneIndex, SceneNamesArray, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
-                        EditorGUILayout.PropertyField(unload, GUIContent.none, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth / column));
+                        list[i].loadOnSceneIndex = Popup(list[i].loadOnSceneIndex, SceneNamesArray, GUILayout.MaxWidth(currentViewWidth / column));
+                        PropertyField(unload, GUIContent.none, GUILayout.MaxWidth(currentViewWidth / column));
                     }
 
                     if (ApplyToAllButton)
@@ -105,12 +111,12 @@ namespace AddressableManager.AddressableSetter.Editor
                     serializedProperty.serializedObject.ApplyModifiedProperties();
                     serializedProperty.serializedObject.Update();
 
-                    EditorGUILayout.EndHorizontal();
+                    EndHorizontal();
                 }
             }
             mainEditor.serializedObject.ApplyModifiedProperties();
             mainEditor.serializedObject.Update();
-            EditorGUILayout.EndVertical();
+            EndVertical();
         }
         private static string[] Headers(IReadOnlyCollection<AData> list, AutoLoad autoLoadLabel)
         {
@@ -120,17 +126,17 @@ namespace AddressableManager.AddressableSetter.Editor
             switch (autoLoadLabel)
             {
                 case AutoLoad.OnStart:
-                    headers = new[] { $"{Constants.OnStart} : Total = {list.Count}", $"AutoLoad", $"load With Scene", $"Unload" };
+                    headers = new[] { $"{OnStart} : Total = {list.Count}", $"AutoLoadStr", $"load With Scene", $"UnloadStr" };
                     buttonName = "Global OnStart";
-                    asset = Utilities.GetAsset<GlobalList>(Constants.GlobalOnStartList);
+                    asset = GetAsset<GlobalList>(Constants.GlobalOnStartList);
                     break;
                 case AutoLoad.OnAwake:
-                    headers = new[] { $"{ Constants.OnAwake} : Total = {list.Count}", $"AutoLoad", $"load With Scene", $"Unload" };
+                    headers = new[] { $"{ OnAwake} : Total = {list.Count}", $"AutoLoadStr", $"load With Scene", $"UnloadStr" };
                     buttonName = "Global OnAwake";
-                    asset = Utilities.GetAsset<GlobalList>(Constants.GlobalOnAwakeList);
+                    asset = GetAsset<GlobalList>(Constants.GlobalOnAwakeList);
                     break;
                 case AutoLoad.None:
-                    headers = new[] { $"No AutoLoad : Total = {list.Count}", $"AutoLoad" };
+                    headers = new[] { $"No AutoLoadStr : Total = {list.Count}", $"AutoLoadStr" };
                     buttonName = string.Empty;
                     asset = null;
                     break;
@@ -139,15 +145,15 @@ namespace AddressableManager.AddressableSetter.Editor
 
 
 
-            EditorGUILayout.BeginVertical();
+            BeginVertical();
 
-            Utilities.PingButton(buttonName, asset);
+            PingButton(buttonName, asset);
 
-            EditorGUILayout.BeginHorizontal("Box");
-            Utilities.Labels(headers, headers.Length);
-            EditorGUILayout.EndHorizontal();
+            BeginHorizontal("Box");
+            Labels(headers, headers.Length);
+            EndHorizontal();
 
-            EditorGUILayout.EndVertical();
+            EndVertical();
 
             return headers;
         }

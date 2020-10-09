@@ -1,6 +1,7 @@
-﻿using System.Linq;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using static UnityEditor.EditorGUILayout;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -26,39 +27,39 @@ namespace AddressableManager.AddressableSetter.Editor
             if (!Setter.ManageEntry.IsEntriesAdded())
             {
 
-                AddButton = Utilities.Button("Add", style, 100, 40);
+                AddButton = UButton("Add", style, 100, 40);
                 if (AddButton) Setter.Add();
 
             }
             else if (Setter.IsGroup)
             {
-                EditorGUILayout.BeginVertical("Box");
-                EditorGUILayout.BeginHorizontal();
+                BeginVertical("Box");
+                BeginHorizontal();
 
                 style.hover.textColor = Color.yellow;
-                UpdateButton = Utilities.Button("Update", style, 100, 40);
+                UpdateButton = UButton("Update", style, 100, 40);
                 if (UpdateButton)
                 {
-                    Utilities.RemoveNullOrEmptyEntries();
+                    RemoveNullOrEmptyEntries();
 
                     Setter.Update();
                 }
 
                 style.hover.textColor = Color.red;
-                RemoveButton = Utilities.Button("Remove", style, 100, 40);
+                RemoveButton = UButton("Remove", style, 100, 40);
                 if (RemoveButton)
                 {
                     var setterGroupName = Setter.GroupName;
                     Setter.Remove();
                     if (AllSetters.settersList.Contains(Setter)) AllSetters.settersList.Remove(Setter);
                     Setter.ManageGroup.RemoveGroup(setterGroupName);
-                    var assetObject = Utilities.GetAsset<Setter>(Setter.name) ?? Utilities.GetAsset<Setter>(setterGroupName);
+                    var assetObject = GetAsset<Setter>(Setter.name) ?? GetAsset<Setter>(setterGroupName);
                     if (assetObject != null) AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(assetObject));
                     AssetDatabase.Refresh();
                 }
 
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.EndVertical();
+                EndHorizontal();
+                EndVertical();
             }
         }
     }

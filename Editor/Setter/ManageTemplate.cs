@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
     public class ManageTemplate
     {
-
         public List<AddressableAssetGroupTemplate> Templates { get; set; } = new List<AddressableAssetGroupTemplate>();
         public List<string> AllProfile => Setter.assetSettings.profileSettings.GetAllProfileNames();
         private Setter Setter { get; }
@@ -22,7 +21,7 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             templateName.ForEach(o =>
             {
-                Utilities.LoadAssetFromPackagePath<AddressableAssetGroupTemplate>(Constants.AddressablesManagerSettings, o, out var asset);
+                LoadAssetFromPackagePath<AddressableAssetGroupTemplate>(Constants.AddressablesManagerSettings, o, out var asset);
                 if (!AllProfile.Contains(asset.Name)) Setter.assetSettings.profileSettings.AddProfile(asset.Name, null);
                 Templates.AddIfNotContains(asset);
             });
@@ -31,8 +30,10 @@ namespace AddressableManager.AddressableSetter.Editor
 
         public void ApplyTemplate()
         {
-            if (Setter.template == null && Templates.Count > 0) Setter.template = Templates[0];
-            if (Setter.ManageGroup.IsGroup()) Setter.template.ApplyToAddressableAssetGroup(Setter.ManageGroup.Group);
+            if (Templates.Count > 0 && Templates[0] !=null && Setter.template == null) Setter.template = Templates[0];
+            if (Setter.template == null ) return;
+
+            if (Setter.ManageGroup.IsGroup(Setter.GroupName)) Setter.template.ApplyToAddressableAssetGroup(Setter.ManageGroup.Group);
             if (!AllProfile.Contains(Setter.template.Name)) Setter.assetSettings.profileSettings.AddProfile(Setter.template.Name, null);
             Setter.assetSettings.name = Constants.AddressableAssetSettingsName;
             Setter.assetSettings.BuildRemoteCatalog = true;
@@ -46,13 +47,13 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             if (GetTemplate(names)) return;
             Setter.AssetSettings.CreateAndAddGroupTemplate(names, "Pack assets into asset bundles.", typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
-            var template = Utilities.GetAsset<AddressableAssetGroupTemplate>(names);
+            var template = GetAsset<AddressableAssetGroupTemplate>(names);
             Templates.AddIfNotContains(template);
         }
 
         private bool GetTemplate(string names)
         {
-            var template = Utilities.GetAsset<AddressableAssetGroupTemplate>(names);
+            var template = GetAsset<AddressableAssetGroupTemplate>(names);
             if (template == null) return false;
             Templates.AddIfNotContains(template);
             return true;

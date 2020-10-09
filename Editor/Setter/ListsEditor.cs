@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using static UnityEditor.EditorGUILayout;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -19,16 +19,16 @@ namespace AddressableManager.AddressableSetter.Editor
         internal bool Init(string status, Dictionary<string, Tuple<List<AData>, AutoLoad>> lists)
         {
             if (lists.Count <= 0) return false;
-            ShowList = EditorGUILayout.BeginFoldoutHeaderGroup(ShowList, status);
+            ShowList = BeginFoldoutHeaderGroup(ShowList, status);
             if (ShowList)
             {
                 AutoUpdate = GUILayout.Toggle(AutoUpdate, "Auto Update");
-                EditorGUILayout.BeginVertical("Box");
+                BeginVertical("Box");
                 lists.ForEach(o => DisplayList.Create(o.Value.Item1, MainEditor.serializedObject.FindProperty(o.Key), o.Value.Item2, MainEditor));
-                EditorGUILayout.EndVertical();
+                EndVertical();
             }
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            GUILayout.Space(5);
+            EndFoldoutHeaderGroup();
+            Space(5);
             return AutoUpdate;
         }
 

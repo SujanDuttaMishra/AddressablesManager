@@ -2,6 +2,8 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.EditorGUILayout;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -31,34 +33,34 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         internal void Init()
         {
-            FolderNameIsGroupName = Utilities.CompareOrdinal(Setter.name, Setter.newGroupName);
+            FolderNameIsGroupName = CompareOrdinal(Setter.name, Setter.newGroupName);
 
-            Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, Status + " Settings");
+            Foldout = BeginFoldoutHeaderGroup(Foldout, Status + " Settings");
             if (Foldout)
             {
                 var headerCount = FolderNameIsGroupName ? 3 : 4;
-                EditorGUILayout.BeginVertical("Box");
-                EditorGUILayout.BeginHorizontal();
+                BeginVertical("Box");
+                BeginHorizontal();
 
                 var header = FolderNameIsGroupName ? 
                     new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] " + nameof(Setter.customLabel) } :
                     new[] { "Set " + nameof(Setter.autoLoad), "[+/-] FolderLabel", "[+/-] GroupLabel", "[+/-] " + nameof(Setter.customLabel) };
 
-                Utilities.Labels(header, headerCount);
+                Labels(header, headerCount);
 
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.BeginHorizontal();
+                EndHorizontal();
+                BeginHorizontal();
                 AutoLoadLabel(headerCount);
                 FolderNameLabel(headerCount);
                 GroupNameLabel(headerCount);
                 CustomLabel(headerCount);
-                EditorGUILayout.EndHorizontal();
+                EndHorizontal();
                 SetCustomLabel();
-                EditorGUILayout.EndVertical();
+                EndVertical();
                 LabelToApply();
             }
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            GUILayout.Space(5);
+            EndFoldoutHeaderGroup();
+            Space(5);
 
 
            
@@ -67,7 +69,7 @@ namespace AddressableManager.AddressableSetter.Editor
         {
             EditorGUI.BeginChangeCheck();
 
-            Utilities.PropertyField(MainEditor, nameof(Setter.autoLoad), GUIContent.none, headerCount);
+            PropertyField(MainEditor, nameof(Setter.autoLoad), GUIContent.none, headerCount);
             MainEditor.serializedObject.ApplyModifiedProperties();
             MainEditor.serializedObject.Update();
 
@@ -128,7 +130,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         private void CustomLabel(int headerCount)
         {
-            Utilities.PropertyField(MainEditor,nameof(Setter.customLabel), GUIContent.none, headerCount);
+            PropertyField(MainEditor,nameof(Setter.customLabel), GUIContent.none, headerCount);
             IsValidCustomLabel = !string.IsNullOrEmpty(Setter.customLabel);
             if (IsValidCustomLabel) ApplyButton = GUILayout.Button("Apply", GUILayout.MaxWidth(100));
             MainEditor.serializedObject.ApplyModifiedProperties();
@@ -136,7 +138,7 @@ namespace AddressableManager.AddressableSetter.Editor
         }
         private void SetCustomLabel()
         {
-            EditorGUILayout.BeginHorizontal();
+            BeginHorizontal();
            
             if (ApplyButton)
             {
@@ -148,27 +150,27 @@ namespace AddressableManager.AddressableSetter.Editor
             if (CustomLabelList?.Count > 0)
             {
                 RemoveLabelButton = GUILayout.Button("Remove Label", GUILayout.MinWidth(50), GUILayout.MaxWidth(100));
-                GroupsNameIndex = EditorGUILayout.Popup(GroupsNameIndex, CustomLabelArray, GUILayout.MinWidth(10), GUILayout.MaxWidth(150));
+                GroupsNameIndex = Popup(GroupsNameIndex, CustomLabelArray, GUILayout.MinWidth(10), GUILayout.MaxWidth(150));
                 if (RemoveLabelButton) Setter.ManageLabel.RemoveLabel(CustomLabelArray[GroupsNameIndex]);
             }
 
-            EditorGUILayout.EndHorizontal();
+            EndHorizontal();
 
 
         }
         private void LabelToApply()
         {
-            EditorGUILayout.BeginVertical("Box");
+            BeginVertical("Box");
             var list = Setter.labelReferences;
             var style = new GUIStyle { richText = true };
             var content = list.Count > 0 ? 
                 $" <color=grey> Labels To Apply :</color> <color=green> {list.Count} </color>  " :
                 $" <color=yellow> Labels To Apply : {list.Count} </color> <color=grey>! Add Labels From Label Settings and Click </color> <color=white> Add  </color>";
-            GUILayout.Label(content, style, Utilities.MaxWidth(1));
+            GUILayout.Label(content, style, MaxWidth(1));
             var property = MainEditor.serializedObject.FindProperty(nameof(Setter.labelReferences));
             property.serializedObject.Update();
-            if (list.Count > 0) for (var i = 0; i < list.Count; i++) EditorGUILayout.PropertyField(property.GetArrayElementAtIndex(i));
-            EditorGUILayout.EndVertical();
+            if (list.Count > 0) for (var i = 0; i < list.Count; i++) PropertyField(property.GetArrayElementAtIndex(i));
+            EndVertical();
         }
 
     }

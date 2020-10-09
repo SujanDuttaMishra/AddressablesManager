@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.EditorGUILayout;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -13,77 +15,77 @@ namespace AddressableManager.AddressableSetter.Editor
         private Setter Setter => (Setter)MainEditor.target;
         private bool Foldout { get; set; } = true;
 
-       
+
 
         internal OptionEditor(UnityEditor.Editor editor)
         {
             MainEditor = editor;
-            
+
         }
         internal void Init()
         {
 
-            Foldout = EditorGUILayout.BeginFoldoutHeaderGroup(Foldout, "Options");
+            Foldout = BeginFoldoutHeaderGroup(Foldout, "Options");
             if (Foldout)
             {
                 Search();
-                if(Setter.include == SearchOption.AllDirectories) AutoOrganize();
+                if (Setter.include == SearchOption.AllDirectories) AutoOrganize();
 
-                Utilities.ApplyModifiedProperties(MainEditor);
+                ApplyModifiedProperties(MainEditor);
             }
 
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            GUILayout.Space(5);
+            EndFoldoutHeaderGroup();
+            Space(5);
 
         }
 
         private void AutoOrganize()
         {
-            EditorGUILayout.BeginVertical("Box");
+            BeginVertical("Box");
             var header = new List<string> { "Auto Organize" };
             Headers(header, header.Count);
             var processDirectory = Setter.ProcessDirectory(Setter.FolderPath, out _);
             header = IsFolderInAssetData ? processDirectory ? new List<string> { "Create UnityType Folders", "Delete Empty Folders" } : new List<string> { "Create UnityType Folders" } : new List<string> { "Move To AssetData", "Create UnityType Folders" };
             Headers(header, header.Count);
-            EditorGUILayout.BeginHorizontal("box");
-            if (!IsFolderInAssetData) Utilities.PropertyField(MainEditor, nameof(Setter.moveToAssetData), header, Setter.Organize);
-            Utilities.PropertyField(MainEditor, nameof(Setter.createUnityTypeFolders), header, Setter.Organize);
+            BeginHorizontal("box");
+            if (!IsFolderInAssetData) PropertyField(MainEditor, nameof(Setter.moveToAssetData), header, Setter.Organize);
+            PropertyField(MainEditor, nameof(Setter.createUnityTypeFolders), header, Setter.Organize);
 
 
             if (processDirectory)
             {
-                Utilities.PropertyField(MainEditor, nameof(Setter.deleteEmptyDirectory), header, Setter.DeleteEmptyDirectory);
+                PropertyField(MainEditor, nameof(Setter.deleteEmptyDirectory), header, Setter.DeleteEmptyDirectory);
             }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
+            EndHorizontal();
+            EndVertical();
         }
 
 
 
         private void Search()
         {
-            EditorGUILayout.BeginVertical("Box");
+            BeginVertical("Box");
             var header = new List<string> { "Search Under", "Exclude Type" };
             Headers(header, header.Count);
-            EditorGUILayout.BeginHorizontal("box");
-            Utilities.PropertyField(MainEditor, nameof(Setter.include), header, Setter.Reset);
+            BeginHorizontal("box");
+            PropertyField(MainEditor, nameof(Setter.include), header, Setter.Reset);
             EnumFlagsField(MainEditor, header, Setter.Reset);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
+            EndHorizontal();
+            EndVertical();
         }
 
         private void Headers(IEnumerable<string> headers, int column)
         {
-            EditorGUILayout.BeginHorizontal();
-            headers.ForEach(o => Utilities.Label(o, column));
-            EditorGUILayout.EndHorizontal();
+            BeginHorizontal();
+            headers.ForEach(o => Label(o, column));
+            EndHorizontal();
         }
 
         public void EnumFlagsField(UnityEditor.Editor mainEditor, List<string> header, Action action)
         {
             EditorGUI.BeginChangeCheck();
             Setter.excludeType = (AssetType)EditorGUILayout.EnumFlagsField(Setter.excludeType);
-            Utilities.ApplyModifiedProperties(mainEditor);
+            ApplyModifiedProperties(mainEditor);
             if (EditorGUI.EndChangeCheck()) action();
         }
 

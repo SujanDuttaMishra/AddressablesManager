@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
+using static AddressableManager.AddressableSetter.Editor.Utilities;
 
 namespace AddressableManager.AddressableSetter.Editor
 {
@@ -18,7 +18,7 @@ namespace AddressableManager.AddressableSetter.Editor
         public bool EntriesAdded { get; set; }
         public void CreateOrMoveEntry(string assetPath)
         {
-            var group = Setter.ManageGroup.CreateGroupIfNotExists(Setter.template);
+            var group = Setter.ManageGroup.CreateGroupIfNotExists(Setter.GroupName,Setter.template);
             var guid = AssetDatabase.AssetPathToGUID(assetPath);
             var entry = Setter.assetSettings.CreateOrMoveEntry(guid, group);
             entry.address = Path.GetFileNameWithoutExtension(assetPath);
@@ -54,7 +54,6 @@ namespace AddressableManager.AddressableSetter.Editor
             if (!Setter.ReCalculatePathToImport(out pathList)) return EntriesAdded;
             EntriesAdded = pathList.Count == Setter.Group.entries.Count;
             Setter.Group.entries.ForEach(o=> Entries.AddIfNotContains(o));
-           // Debug.Log($"Found In Folder {pathList.Count} Entries Added {Entries.Count}");
             return EntriesAdded ;
         }
 
@@ -90,11 +89,11 @@ namespace AddressableManager.AddressableSetter.Editor
         }
 
         private AData FindInLists(AddressableAssetEntry o, string id, List<List<AData>> alList) => alList?.Find(l => l.Find(Match(id)) != null)?.Find(Match(id)) ?? new AData(o, Setter);
-        private static Predicate<AData> Match(string id) => aData => Utilities.CompareOrdinal(aData.ID, id);
+        private static Predicate<AData> Match(string id) => aData => CompareOrdinal(aData.ID, id);
         public void RemoveEntry()
         {
-            Utilities.RemoveAdataFrom(OnStartList, Utilities.GlobalOnStartList);
-            Utilities.RemoveAdataFrom(OnAwakeList, Utilities.GlobalOnAwakeList);
+            RemoveAdataFrom(OnStartList, GlobalOnStartList);
+            RemoveAdataFrom(OnAwakeList, GlobalOnAwakeList);
             NoAutoLoadList?.Clear();
             OnStartList?.Clear();
             OnAwakeList?.Clear();
